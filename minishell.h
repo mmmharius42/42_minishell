@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 01:00:46 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 01:19:41 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ void	env_init(t_env **env_list, char **env);
 char	*get_env_value(t_env *env_list, char *name);
 void	set_env_value(t_env *env_list, char *name, char *value);
 void	unset_env_var(t_env **env_list, char *name);
+int		var_exists(t_env *env, char *var);
 char	*get_name(char *str);
 char	*get_value(char *str);
 

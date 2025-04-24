@@ -6,7 +6,7 @@
 /*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 23:48:23 by mpapin            #+#    #+#             */
-/*   Updated: 2025/04/25 00:58:08 by mpapin           ###   ########.fr       */
+/*   Updated: 2025/04/25 01:27:40 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,18 @@ void    free_env(t_env *env)
 	}
 }
 
+static int	var_exists(t_env *env, char *var)
+{
+	while (env != NULL)
+	{
+		if (ft_strcmp(env->name, var) == 0)
+			return (1);
+		env = env->next;
+	}
+	return (0);
+}
+
+
 //
 
 void	sort_env(t_env **var, int size)
@@ -216,8 +228,6 @@ int	check_arg(char *arg)
 	return (1);
 }
 
-
-
 void	export_sort_print(t_env *env)
 {
 	int		i;
@@ -253,26 +263,57 @@ void	export_sort_print(t_env *env)
 	free(arr);
 }
 
-void    ft_export(char **args, t_env **env)
+void	update_var(t_env *env, char *name, char *value, int equal)
 {
-	int i;
-
-	if (!args[1])
-		export_sort_print(*env);
-	
-	else
+	while (env)
 	{
-		i = 0;
-		while (args[++i])
+		if (ft_strcmp(env->name, name) == 0)
 		{
-			if (check_arg(args[i]) == 0)
-				return ;
-			else
-				printf("\nen attente d'ambroise\n");
-				
+			if (equal)
+			{
+				free(env->value);
+				env->value = value ? strdup(value) : NULL;
+				env->equal_sign = 1;
+			}
+			return ;
 		}
+		env = env->next;
 	}
 }
+
+void	ft_export(char **args, t_env **env)
+{
+	int		i;
+	char	*name;
+	char	*value;
+	int		equal;
+	t_env	*new;
+
+	if (!args[1])
+	{
+		export_sort_print(*env);
+		return ;
+	}
+	i = 0;
+	while (args[++i])
+	{
+		if (!check_arg(args[i]))
+			continue ;
+		equal = (strchr(args[i], '=') != NULL);
+		name = get_name(args[i]);
+		value = get_value(args[i]);
+		if (var_exists(*env, name))
+			update_var(*env, name, value, equal);
+		else
+		{
+			new = env_new_var(name, value, equal);
+			env_add_back(env, new);
+		}
+		free(name);
+		free(value);
+	}
+}
+
 
 int main(int argc, char **argv, char **envp)
 {
@@ -282,15 +323,17 @@ int main(int argc, char **argv, char **envp)
 	if (!cmd)
 		return (1);
 	env_init(&env_list, envp);
-	cmd->args = malloc(sizeof(char *) * 2);
+	cmd->args = malloc(sizeof(char *) * 3);
 	if (!cmd->args)
 		return (free(cmd), 1);
 	cmd->args[0] = strdup("export");
-	// cmd->args[1] = strdup("_TEST=hello");
-	cmd->args[1] = NULL;
+	cmd->args[1] = strdup("_TEST=hello");
+	cmd->args[2] = NULL;
 	ft_export(cmd->args, &env_list);
+	cmd->args[1] = NULL;
 	free(cmd->args[0]);
-	// free(cmd->args[1]);
+	ft_export(cmd->args, &env_list);
+	free(cmd->args[1]);
 	free(cmd->args);
 	free(cmd);
 	free_env(env_list);

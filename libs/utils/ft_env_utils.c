@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:45:47 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 00:10:23 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 01:19:30 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,3 +75,15 @@ void	unset_env_var(t_env **env_list, char *name)
 		current = current->next;
 	}
 }
+
+int	var_exists(t_env *env, char *var)
+{
+	while (env != NULL)
+	{
+		if (ft_strcmp(env->name, var) == 0)
+			return (1);
+		env = env->next;
+	}
+	return (0);
+}
+
