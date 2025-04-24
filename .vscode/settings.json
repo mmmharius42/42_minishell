@@ -5,6 +5,7 @@
 		"*.vue": "vue",
 		"history.h": "c",
 		"type_traits": "c",
-		"utility": "c"
+		"utility": "c",
+		"cstdlib": "c"
 	}
 }
