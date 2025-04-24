@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 23:27:14 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 00:13:49 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 00:24:14 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ static char	*process_variable(char *str, char *input, int *i, t_env *env)
 	char	*result;
 
 	var_name = get_var_name(&input[*i]);
-	*i += strlen(var_name) + 1;
+	*i += ft_strlen(var_name) + 1;
 	result = replace_var(str, var_name, env);
 	return (result);
 }
 
-static char	*replace_variables(char *input, t_env *env)
+static char	*replace_all_variables(char *input, t_env *env)
 {
 	int		i;
 	char	*new_str;
@@ -49,12 +49,19 @@ static char	*replace_variables(char *input, t_env *env)
 void	expand_variable(t_token *tokens, t_env *env)
 {
 	char	*expanded;
+	t_token	*current;
 
-	while (tokens)
+	current = tokens;
+	while (current)
 	{
-		expanded = replace_variables(tokens->value, env);
-		free(tokens->value);
-		tokens->value = expanded;
-		tokens = tokens->next;
+		if (current->is_single_quote && !current->is_double_quote)
+		{
+			current = current->next;
+			continue;
+		}
+		expanded = replace_all_variables(current->value, env);
+		free(current->value);
+		current->value = expanded;
+		current = current->next;
 	}
 }
