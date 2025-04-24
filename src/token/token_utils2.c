@@ -41,8 +41,22 @@ void	print_tokens(t_token *tokens)
 			quote_type = "DOUBLE";
 		else
 			quote_type = "NONE";
-		printf("Token: [%s] - Type: %s - Quote: %s\n",
-				current->value, type_str, quote_type);
+	}
+  printf("Token: [%s] - Type: %s\n", current->value, type_str);
+	current = current->next;
+}
+
+int	token_count(t_token *tokens)
+{
+	int		count;
+	t_token	*current;
+
+	count = 0;
+	current = tokens;
+	while (current)
+	{
+		count++;
 		current = current->next;
 	}
+	return (count);
 }

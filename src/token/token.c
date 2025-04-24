@@ -12,6 +12,33 @@
 
 #include "minishell.h"
 
+char	*extract_word(char *input, int *i)
+{
+	int		start;
+	int		len;
+	char	*word;
+	char	quote;
+
+	start = *i;
+	if (input[*i] == '\'' || input[*i] == '"')
+	{
+		quote = input[(*i)++];
+		start = *i;
+		while (input[*i] && input[*i] != quote)
+			(*i)++;
+		len = *i - start;
+		(*i)++;
+	}
+	else
+	{
+		while (input[*i] && !is_special_char(input[*i]))
+			(*i)++;
+		len = *i - start;
+	}
+	word = ft_substr(input, start, len);
+	return (word);
+}
+
 t_token	*tokenize(char *input)
 {
 	int		i;

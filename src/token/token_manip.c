@@ -70,6 +70,11 @@ t_token	*process_token(char *input, int *i)
 		return (NULL);
 	type = get_token_type(value);
 	token = create_token(value, type, is_single_quote, is_double_quote);
+		value = extract_word(input, i);
+	if (!value)
+		return (NULL);
+	type = get_token_type(value);
+	token = create_token(value, type);
 	free(value);
 	return (token);
 }
