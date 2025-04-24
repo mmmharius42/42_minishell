@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 20:44:15 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:46:59 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ typedef struct s_token
 {
 	char			*value;
 	int				type;
+	int				is_single_quote;
+	int				is_double_quote;
 	struct s_token	*next;
 }	t_token;
 
