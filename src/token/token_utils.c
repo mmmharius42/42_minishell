@@ -54,39 +54,3 @@ int	token_count(t_token *tokens)
 	}
 	return (count);
 }
-
-char	*extract_operator(char *input, int *i)
-{
-	if (input[*i] == '|')
-	{
-		(*i)++;
-		return (ft_strdup("|"));
-	}
-	else if (input[*i] == '<')
-	{
-		if (input[*i + 1] == '<')
-		{
-			(*i) += 2;
-			return (ft_strdup("<<"));
-		}
-		(*i)++;
-		return (ft_strdup("<"));
-	}
-	else if (input[*i] == '>')
-	{
-		if (input[*i + 1] == '>')
-		{
-			(*i) += 2;
-			return (ft_strdup(">>"));
-		}
-		(*i)++;
-		return (ft_strdup(">"));
-	}
-	return (NULL);
-}
-
-void	skip_spaces(char *input, int *i)
-{
-	while (input[*i] && (input[*i] == ' ' || input[*i] == '\t'))
-		(*i)++;
-}
