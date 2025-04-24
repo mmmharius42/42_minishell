@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 20:21:51 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 20:29:58 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:42:30 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,36 +32,6 @@ int	get_token_type(char *str)
 int	is_special_char(char c)
 {
 	return (c == '|' || c == '<' || c == '>' || c == ' ' || c == '\t');
-}
-
-char	*extract_operator(char *input, int *i)
-{
-	if (input[*i] == '|')
-	{
-		(*i)++;
-		return (ft_strdup("|"));
-	}
-	else if (input[*i] == '<')
-	{
-		if (input[*i + 1] == '<')
-		{
-			(*i) += 2;
-			return (ft_strdup("<<"));
-		}
-		(*i)++;
-		return (ft_strdup("<"));
-	}
-	else if (input[*i] == '>')
-	{
-		if (input[*i + 1] == '>')
-		{
-			(*i) += 2;
-			return (ft_strdup(">>"));
-		}
-		(*i)++;
-		return (ft_strdup(">"));
-	}
-	return (NULL);
 }
 
 void	skip_spaces(char *input, int *i)

@@ -27,7 +27,8 @@ endif
 SRCS			= main.c src/clean.c \
 					src/input/check_input.c src/input/print_path.c \
 					src/token/token_manip.c src/token/token_utils.c \
-					src/token/token_utils2.c src/token/token.c
+					src/token/token_utils2.c src/token/token.c \
+					src/token/token_operator.c
 
 # Dossier pour les objets
 OBJDIR			= objs
