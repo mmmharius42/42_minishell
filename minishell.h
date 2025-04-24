@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 19:59:29 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:15:21 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ typedef struct s_cmd
 void	clean_shell(char *input);
 
 /** Input */
+char	*custom_reader();
 int		check_input(char *input);
-char	*print_path(void);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:23:01 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 19:59:36 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:15:35 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static char	*get_input(void)
 {
 	char	*input;
 
-	input = readline(print_path());
+	input = custom_reader();
 	return (input);
 }
 
