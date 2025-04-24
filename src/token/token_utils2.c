@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 20:25:11 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 20:25:20 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 21:06:00 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	print_tokens(t_token *tokens)
 {
 	t_token	*current;
 	char	*type_str;
+	char	*quote_type;
 
 	current = tokens;
 	while (current)
@@ -34,9 +35,15 @@ void	print_tokens(t_token *tokens)
 			type_str = "HEREDOC";
 		else
 			type_str = "UNKNOWN";
-		printf("Token: [%s] - Type: %s\n", current->value, type_str);
-		current = current->next;
+		if (current->is_single_quote)
+			quote_type = "SINGLE";
+		else if (current->is_double_quote)
+			quote_type = "DOUBLE";
+		else
+			quote_type = "NONE";
 	}
+  printf("Token: [%s] - Type: %s\n", current->value, type_str);
+	current = current->next;
 }
 
 int	token_count(t_token *tokens)
