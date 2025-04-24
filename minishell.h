@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 00:55:30 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 01:00:46 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
+# include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h>
