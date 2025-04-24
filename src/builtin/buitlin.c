@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	check_builtin(t_cmd *cmd)
+/* int	check_builtin(t_cmd *cmd)
 {
 	if (!cmd->args[0])
 		return (0);
@@ -55,4 +55,4 @@ void	exec_builtin(t_cmd *cmd, char ***env)
 		ft_cd(cmd, env);
 	else if (ft_strncmp(cmd->args[0], "exit", 3) == 0)
 		return ;
-}
+} */

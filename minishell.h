@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 01:00:46 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 01:15:14 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,14 @@ typedef struct s_token
 
 typedef struct s_cmd
 {
-	char	*path;
-	char	**args;
+	char			*path;
+	char			**args;
+	t_redir			*redir;
+	t_token			*tokens;
+	struct s_cmd	*next;
 }	t_cmd;
+
+extern int	g_return_code;
 
 /** Utils */
 int		ft_is_path(char c);
@@ -82,7 +87,7 @@ char	*custom_reader(void);
 int		check_input(char *input);
 
 /** Token */
-t_token	*tokenize(char *input);
+t_token	*tokenize(char *input, t_env *env);
 t_token	*create_token(char *value, int type, int is_single_quote,
 			int is_double_quote);
 t_token	*process_token(char *input, int *i);
@@ -93,7 +98,6 @@ char	*extract_operator(char *input, int *i);
 int		get_token_type(char *str);
 int		is_special_char(char c);
 void	skip_spaces(char *input, int *i);
-void	print_tokens(t_token *tokens);
 int		token_count(t_token *tokens);
 
 /** Expand */

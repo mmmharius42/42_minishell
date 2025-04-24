@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 23:27:14 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 00:24:14 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 01:14:00 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	expand_variable(t_token *tokens, t_env *env)
 		if (current->is_single_quote && !current->is_double_quote)
 		{
 			current = current->next;
-			continue;
+			continue ;
 		}
 		expanded = replace_all_variables(current->value, env);
 		free(current->value);
