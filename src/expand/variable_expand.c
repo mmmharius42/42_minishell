@@ -6,22 +6,24 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 23:27:14 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 23:51:52 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 00:13:49 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*process_variable(char *str, char *input, int *i)
+static char	*process_variable(char *str, char *input, int *i, t_env *env)
 {
 	char	*var_name;
+	char	*result;
 
 	var_name = get_var_name(&input[*i]);
 	*i += strlen(var_name) + 1;
-	return (replace_var(str, var_name));
+	result = replace_var(str, var_name, env);
+	return (result);
 }
 
-char	*replace_variables(char *input)
+static char	*replace_variables(char *input, t_env *env)
 {
 	int		i;
 	char	*new_str;
@@ -34,7 +36,7 @@ char	*replace_variables(char *input)
 	while (input[i])
 	{
 		if (input[i] == '$')
-			new_str = process_variable(new_str, input, &i);
+			new_str = process_variable(new_str, input, &i, env);
 		else
 		{
 			new_str = add_char_to_str(new_str, input[i]);
@@ -44,15 +46,15 @@ char	*replace_variables(char *input)
 	return (new_str);
 }
 
-void	expand_variable(t_token *tokens)
+void	expand_variable(t_token *tokens, t_env *env)
 {
 	char	*expanded;
 
 	while (tokens)
 	{
-		expanded = replace_variables(tokens->value);
-		printf("Expanded: %s\n", expanded);
-		free(expanded);
+		expanded = replace_variables(tokens->value, env);
+		free(tokens->value);
+		tokens->value = expanded;
 		tokens = tokens->next;
 	}
 }
