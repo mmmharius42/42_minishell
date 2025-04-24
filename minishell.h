@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 21:06:50 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:52:25 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,9 @@ typedef struct s_cmd
 	char	**args;
 }	t_cmd;
 
+/** Utils */
+int		ft_is_path(char c);
+
 /** Fonctions de netoyage */
 void	free_tokens(t_token	*tokens);
 void	clean_shell(char *input, t_token *tokens);
@@ -89,6 +92,12 @@ int		is_special_char(char c);
 void	skip_spaces(char *input, int *i);
 void	print_tokens(t_token *tokens);
 int		token_count(t_token *tokens);
+
+/** Expand */
+char	*get_var_name(char *value);
+char	*replace_var(char *str, char *var_name);
+char	*add_char_to_str(char *str, char c);
+void	expand_variable(t_token *tokens);
 
 //buitlin.c
 int		check_builtin(t_cmd *cmd);
