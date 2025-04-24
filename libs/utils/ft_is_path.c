@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalnum.c                                       :+:      :+:    :+:   */
+/*   ft_is_path.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/05 06:41:40 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 23:42:20 by aberenge         ###   ########.fr       */
+/*   Created: 2025/04/24 23:37:08 by aberenge          #+#    #+#             */
+/*   Updated: 2025/04/24 23:46:18 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_isalnum(int c)
+int	ft_is_path(char c)
 {
-	if (ft_isalpha(c) || ft_isdigit(c))
+	if (ft_isalnum(c) || c == '_')
 		return (1);
 	return (0);
 }
