@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 23:27:14 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 00:09:59 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 00:13:49 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ void	expand_variable(t_token *tokens, t_env *env)
 	while (tokens)
 	{
 		expanded = replace_variables(tokens->value, env);
-		printf("Expanded: %s\n", expanded);
-		free(expanded);
+		free(tokens->value);
+		tokens->value = expanded;
 		tokens = tokens->next;
 	}
 }
