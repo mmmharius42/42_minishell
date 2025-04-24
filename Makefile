@@ -31,6 +31,7 @@ SRCS			= main.c src/clean.c \
 					src/token/token_operator.c src/token/extract_word.c \
 					src/expand/expand.c \
 					src/expand/variable_expand.c src/expand/variable_expand_utils.c \
+					src/expand/tilde_expand.c \
 					libs/utils/ft_is_path.c libs/utils/ft_env_utils.c \
 					libs/utils/ft_env_utils2.c
 

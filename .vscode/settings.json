@@ -7,6 +7,7 @@
 		"type_traits": "c",
 		"utility": "c",
 		"cstdlib": "c",
-		"minishell.h": "c"
+		"minishell.h": "c",
+		"signal.h": "c"
 	}
 }
