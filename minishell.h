@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
 /*   Updated: 2025/04/24 20:46:59 by aberenge         ###   ########.fr       */
@@ -89,5 +89,14 @@ int		token_count(t_token *tokens);
 
 char	*extract_word(char *input, int *i);
 t_token	*tokenize(char *input);
+
+//buitlin.c
+int		check_builtin(t_cmd *cmd);
+void	exec_builtin(t_cmd *cmd, char ***env);
+
+// env.c
+t_env	*env_new_var(char *name, char *value, int equal_sign);
+void	env_add_back(t_env **env, t_env *new);
+void	env_init(t_env **env_list, char **env);
 
 #endif

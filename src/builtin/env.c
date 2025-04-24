@@ -12,27 +12,7 @@
 
 #include "minishell.h"
 
-t_env	*env_new_var(char *name, char *value, int equal_sign)
-{
-	t_env	*new_var;
-
-	new_var = malloc(sizeof(t_env));
-	if (new_var == NULL)
-		return (NULL);
-	if (name != NULL)
-		new_var->name = strdup(name);
-	else
-		new_var->name = NULL;
-	if (value != NULL)
-		new_var->value = strdup(value);
-	else
-		new_var->value = NULL;
-	new_var->equal_sign = equal_sign;
-	new_var->next = NULL;
-	return (new_var);
-}
-
-char	*get_name(char *str)
+static char	*get_name(char *str)
 {
 	int		i;
 	char	*name;
@@ -53,7 +33,7 @@ char	*get_name(char *str)
 	return (name);
 }
 
-char	*get_value(char *str)
+static char	*get_value(char *str)
 {
 	char	*equal;
 	char	*value;
@@ -63,6 +43,26 @@ char	*get_value(char *str)
 		return (NULL);
 	value = ft_strdup(equal + 1);
 	return (value);
+}
+
+t_env	*env_new_var(char *name, char *value, int equal_sign)
+{
+	t_env	*new_var;
+
+	new_var = malloc(sizeof(t_env));
+	if (new_var == NULL)
+		return (NULL);
+	if (name != NULL)
+		new_var->name = strdup(name);
+	else
+		new_var->name = NULL;
+	if (value != NULL)
+		new_var->value = strdup(value);
+	else
+		new_var->value = NULL;
+	new_var->equal_sign = equal_sign;
+	new_var->next = NULL;
+	return (new_var);
 }
 
 void	env_add_back(t_env **env, t_env *new)
