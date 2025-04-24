@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static char	*get_name(char *str)
+char	*get_name(char *str)
 {
 	int		i;
 	char	*name;
@@ -33,7 +33,7 @@ static char	*get_name(char *str)
 	return (name);
 }
 
-static char	*get_value(char *str)
+char	*get_value(char *str)
 {
 	char	*equal;
 	char	*value;
@@ -53,11 +53,11 @@ t_env	*env_new_var(char *name, char *value, int equal_sign)
 	if (new_var == NULL)
 		return (NULL);
 	if (name != NULL)
-		new_var->name = strdup(name);
+		new_var->name = ft_strdup(name);
 	else
 		new_var->name = NULL;
 	if (value != NULL)
-		new_var->value = strdup(value);
+		new_var->value = ft_strdup(value);
 	else
 		new_var->value = NULL;
 	new_var->equal_sign = equal_sign;
@@ -101,4 +101,42 @@ void	env_init(t_env **env_list, char **env)
 		free(value);
 		env_add_back(env_list, new);
 	}
+}
+
+void	free_env(t_env *env)
+{
+	t_env	*tmp;
+
+	while (env != NULL)
+	{
+		tmp = env->next;
+		if (env->name)
+			free(env->name);
+		if (env->value)
+			free(env->value);
+		free(env);
+		env = tmp;
+	}
+}
+
+void	ft_env(t_env *env_list)
+{
+	while (env_list != NULL)
+	{
+		if (env_list->equal_sign && env_list->value != NULL)
+			printf("%s=%s\n", env_list->name, env_list->value);
+		env_list = env_list->next;
+	}
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_env *env_list = NULL;
+
+	(void)argc;
+	(void)argv;
+	env_init(&env_list, envp);
+	ft_env(env_list);
+	free_env(env_list);
+	return (0);
 }
