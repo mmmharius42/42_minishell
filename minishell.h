@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 00:55:30 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 01:00:46 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
+# include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h>
@@ -105,6 +107,10 @@ void	expand_all(t_token *tokens, t_env *env);
 //buitlin.c
 int		check_builtin(t_cmd *cmd);
 void	exec_builtin(t_cmd *cmd, char ***env);
+
+// utils/utils.c
+char	*get_name(char *str);
+char	*get_value(char *str);
 
 // env.c
 t_env	*env_new_var(char *name, char *value, int equal_sign);
