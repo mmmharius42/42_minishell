@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 20:46:59 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 21:06:50 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,20 +75,20 @@ void	clean_shell(char *input, t_token *tokens);
 char	*custom_reader(void);
 int		check_input(char *input);
 
-/** Tokenisation */
-t_token	*create_token(char *value, int type);
-void	add_token(t_token **tokens, t_token *new_token);
+/** Token */
+t_token	*tokenize(char *input);
+t_token	*create_token(char *value, int type, int is_single_quote,
+			int is_double_quote);
 t_token	*process_token(char *input, int *i);
-
+void	add_token(t_token **tokens, t_token *new_token);
+char	*extract_word(char *input, int *i, int *is_single_quote,
+			int *is_double_quote);
+char	*extract_operator(char *input, int *i);
 int		get_token_type(char *str);
 int		is_special_char(char c);
-char	*extract_operator(char *input, int *i);
 void	skip_spaces(char *input, int *i);
 void	print_tokens(t_token *tokens);
 int		token_count(t_token *tokens);
-
-char	*extract_word(char *input, int *i);
-t_token	*tokenize(char *input);
 
 //buitlin.c
 int		check_builtin(t_cmd *cmd);

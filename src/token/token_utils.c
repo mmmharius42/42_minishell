@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 20:21:51 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 20:42:30 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 21:06:02 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,19 @@ void	skip_spaces(char *input, int *i)
 {
 	while (input[*i] && (input[*i] == ' ' || input[*i] == '\t'))
 		(*i)++;
+}
+
+int	token_count(t_token *tokens)
+{
+	int		count;
+	t_token	*current;
+
+	count = 0;
+	current = tokens;
+	while (current)
+	{
+		count++;
+		current = current->next;
+	}
+	return (count);
 }
