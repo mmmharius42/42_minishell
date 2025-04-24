@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:49:04 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 00:01:34 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 01:35:28 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,12 @@ void	free_tokens(t_token	*tokens)
 	}
 }
 
-void	clean_shell(char *input, t_token *tokens)
+void	clean_shell(char *input, t_token *tokens, t_cmd *cmd)
 {
 	if (input)
 		free(input);
 	if (tokens)
 		free_tokens(tokens);
+	if (cmd)
+		free_commands(cmd);
 }

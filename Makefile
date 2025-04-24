@@ -32,6 +32,9 @@ SRCS			= main.c src/clean.c \
 					src/expand/expand.c \
 					src/expand/variable_expand.c src/expand/variable_expand_utils.c \
 					src/expand/tilde_expand.c \
+					src/parsing/parse_args.c src/parsing/parse_free.c \
+					src/parsing/parse_path.c src/parsing/parse_redir.c \
+					src/parsing/parse.c src/parsing/parse_utils.c \
 					libs/utils/ft_is_path.c libs/utils/ft_env_utils.c \
 					libs/utils/ft_env_utils2.c \
 					src/builtin/buitlin.c \
