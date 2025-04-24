@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 20:42:40 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:44:15 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 
 # define MAX_LINE 1024
 
-#define RED "\033[0;31m"
-#define RESET "\033[0m"
+# define RED "\033[0;31m"
+# define RESET "\033[0m"
 
 # define WORD 0
 # define PIPE 1
@@ -43,7 +43,6 @@ typedef struct s_redir
 	int				type;
 	struct s_redir	*next;
 }	t_redir;
-
 
 typedef struct s_env
 {
@@ -71,7 +70,7 @@ void	free_tokens(t_token	*tokens);
 void	clean_shell(char *input, t_token *tokens);
 
 /** Input */
-char	*custom_reader();
+char	*custom_reader(void);
 int		check_input(char *input);
 
 /** Tokenisation */

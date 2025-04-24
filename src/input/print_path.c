@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:53:35 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 20:15:14 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:43:48 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ static char	*print_path(void)
 		last_slash--;
 	if (*last_slash == '/')
 		last_slash++;
-	result = malloc(ft_strlen(last_slash) + ft_strlen(RED) + ft_strlen(" ➜  ") + ft_strlen(RESET) + 1);
+	result = malloc(ft_strlen(last_slash) + ft_strlen(RED)
+			+ ft_strlen(" ➜  ") + ft_strlen(RESET) + 1);
 	if (!result)
 		return (NULL);
 	ft_strcpy(result, last_slash);
@@ -38,7 +39,7 @@ static char	*print_path(void)
 	return (result);
 }
 
-char	*custom_reader()
+char	*custom_reader(void)
 {
 	char	*input;
 	char	*line;
