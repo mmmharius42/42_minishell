@@ -29,8 +29,11 @@ SRCS			= main.c src/clean.c \
 					src/token/token_manip.c src/token/token_utils.c \
 					src/token/token_utils2.c src/token/token.c \
 					src/token/token_operator.c src/token/extract_word.c \
-					src/builtin/utils/utils.c src/builtin/buitlin.c \
-					src/builtin/env.c
+					src/expand/expand.c \
+					src/expand/variable_expand.c src/expand/variable_expand_utils.c \
+					src/expand/tilde_expand.c \
+					libs/utils/ft_is_path.c libs/utils/ft_env_utils.c \
+					libs/utils/ft_env_utils2.c
 
 # Dossier pour les objets
 OBJDIR			= objs

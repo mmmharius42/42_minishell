@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:35:33 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 19:48:28 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:54:23 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,21 @@
 static int	check_quote(char *input)
 {
 	int	i;
-	int	double_quotes;
-	int	single_quotes;
+	int	in_double;
+	int	in_single;
 
-	i = -1;
-	single_quotes = 0;
-	double_quotes = 0;
-	while (input[++i])
+	i = 0;
+	in_double = 0;
+	in_single = 0;
+	while (input[i])
 	{
-		if (input[i] == '"')
-			double_quotes++;
-		if (input[i] == '\'')
-			single_quotes++;
+		if (input[i] == '"' && !in_single)
+			in_double = !in_double;
+		else if (input[i] == '\'' && !in_double)
+			in_single = !in_single;
+		i++;
 	}
-	if ((!(double_quotes % 2 == 0) && double_quotes != 0)
-		|| (!(single_quotes % 2 == 0) && single_quotes != 0))
+	if (in_double || in_single)
 		return (printf("Minishell: Unclosed quotes\n"), 0);
 	return (1);
 }

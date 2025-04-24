@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 23:47:22 by mpapin           ###   ########.fr       */
+/*   Updated: 2025/04/25 01:00:46 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,12 @@ typedef struct s_cmd
 	char	**args;
 }	t_cmd;
 
+/** Utils */
+int		ft_is_path(char c);
+
 /** Fonctions de netoyage */
 void	free_tokens(t_token	*tokens);
+void	free_env(t_env *env);
 void	clean_shell(char *input, t_token *tokens);
 
 /** Input */
@@ -92,8 +96,15 @@ void	skip_spaces(char *input, int *i);
 void	print_tokens(t_token *tokens);
 int		token_count(t_token *tokens);
 
-/** Builtin */
-// builtin.c
+/** Expand */
+char	*get_var_name(char *value);
+char	*replace_var(char *str, char *var_name, t_env *env);
+char	*add_char_to_str(char *str, char c);
+void	expand_variable(t_token *tokens, t_env *env);
+void	expand_tilde(t_token *tokens, t_env *env);
+void	expand_all(t_token *tokens, t_env *env);
+
+//buitlin.c
 int		check_builtin(t_cmd *cmd);
 void	exec_builtin(t_cmd *cmd, char ***env);
 
@@ -102,6 +113,13 @@ char	*get_name(char *str);
 char	*get_value(char *str);
 
 // env.c
-void	ft_env(t_env *env_list);
+t_env	*env_new_var(char *name, char *value, int equal_sign);
+void	env_add_back(t_env **env, t_env *new);
+void	env_init(t_env **env_list, char **env);
+char	*get_env_value(t_env *env_list, char *name);
+void	set_env_value(t_env *env_list, char *name, char *value);
+void	unset_env_var(t_env **env_list, char *name);
+char	*get_name(char *str);
+char	*get_value(char *str);
 
 #endif

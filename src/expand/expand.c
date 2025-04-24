@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalnum.c                                       :+:      :+:    :+:   */
+/*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/05 06:41:40 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 23:42:20 by aberenge         ###   ########.fr       */
+/*   Created: 2025/04/25 00:14:12 by aberenge          #+#    #+#             */
+/*   Updated: 2025/04/25 00:54:12 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_isalnum(int c)
+void	expand_all(t_token *tokens, t_env *env)
 {
-	if (ft_isalpha(c) || ft_isdigit(c))
-		return (1);
-	return (0);
+	expand_variable(tokens, env);
+	expand_tilde(tokens, env);
 }

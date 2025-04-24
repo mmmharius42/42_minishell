@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:23:01 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 20:34:16 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 00:16:06 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,28 @@ static char	*get_input(void)
 	return (input);
 }
 
-static void	process_input(char *input)
+static void	process_input(char *input, t_env **env)
 {
 	t_token	*tokens;
 
 	if (!check_input(input))
 		return ;
 	tokens = tokenize(input);
+	expand_all(tokens, *env);
 	print_tokens(tokens);
 	clean_shell(input, tokens);
 }
 
-int	main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **envp)
 {
+	t_env	*env;
 	char	*input;
 	int		exit_status;
 
 	(void) argc;
 	(void) argv;
-	(void) env;
+	env = NULL;
+	env_init(&env, envp);
 	exit_status = 0;
 	while (!exit_status)
 	{
@@ -46,8 +49,9 @@ int	main(int argc, char **argv, char **env)
 		if (!input)
 			break ;
 		if (*input)
-			process_input(input);
+			process_input(input, &env);
 	}
+	free_env(env);
 	printf("exit\n");
 	return (0);
 }

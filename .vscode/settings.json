@@ -1,5 +1,13 @@
 {
 	"files.associations": {
-		"history.h": "c"
+		"*.page-template": "vue",
+		"*.layout-template": "vue",
+		"*.vue": "vue",
+		"history.h": "c",
+		"type_traits": "c",
+		"utility": "c",
+		"cstdlib": "c",
+		"minishell.h": "c",
+		"signal.h": "c"
 	}
 }
