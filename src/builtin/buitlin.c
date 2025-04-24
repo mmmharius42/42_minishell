@@ -42,7 +42,7 @@ void	exec_builtin(t_cmd *cmd, char ***env)
 	if (ft_strncmp(cmd->args[0], "history", 8) == 0)
 		ft_history();
 	else if (ft_strncmp(cmd->args[0], "pwd", 4) == 0)
-		ft_pwd(*env);
+		ft_pwd();
 	else if (ft_strncmp(cmd->args[0], "echo", 5) == 0)
 		ft_echo(cmd->argument);
 	else if (ft_strncmp(cmd->args[0], "env", 4) == 0)

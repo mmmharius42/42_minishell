@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 21:06:50 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:47:22 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
+# include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h>
@@ -90,13 +92,16 @@ void	skip_spaces(char *input, int *i);
 void	print_tokens(t_token *tokens);
 int		token_count(t_token *tokens);
 
-//buitlin.c
+/** Builtin */
+// builtin.c
 int		check_builtin(t_cmd *cmd);
 void	exec_builtin(t_cmd *cmd, char ***env);
 
+// utils/utils.c
+char	*get_name(char *str);
+char	*get_value(char *str);
+
 // env.c
-t_env	*env_new_var(char *name, char *value, int equal_sign);
-void	env_add_back(t_env **env, t_env *new);
-void	env_init(t_env **env_list, char **env);
+void	ft_env(t_env *env_list);
 
 #endif
