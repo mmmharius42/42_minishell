@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 19:40:33 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 19:59:29 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 # include "get_next_line.h"
 
 # define MAX_LINE 1024
+
+#define RED "\033[0;31m"
+#define RESET "\033[0m"
 
 # define WORD 0
 # define PIPE 1
@@ -59,12 +62,15 @@ typedef struct s_token
 
 typedef struct s_cmd
 {
-	char	*name;
 	char	*path;
 	char	**args;
 }	t_cmd;
 
-/** Verifications input */
+/** Fonctions de netoyage */
+void	clean_shell(char *input);
+
+/** Input */
 int		check_input(char *input);
+char	*print_path(void);
 
 #endif

@@ -24,8 +24,9 @@ else ifeq ($(UNAME_S), Darwin)
 endif
 
 # Fichiers sources
-SRCS			= main.c \
+SRCS			= main.c src/clean.c \
 					src/token/check_input.c \
+					libs/utils/print_path.c
 
 # Dossier pour les objets
 OBJDIR			= objs

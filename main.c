@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:23:01 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 19:41:18 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 19:59:36 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static char	*get_input(void)
 {
 	char	*input;
 
-	input = readline("$> ");
+	input = readline(print_path());
 	return (input);
 }
 
@@ -26,7 +26,7 @@ static void	process_input(char *input)
 		return ;
 }
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
 	char	*input;
 	int		exit_status;
@@ -45,5 +45,6 @@ int main(int argc, char **argv, char **env)
 		free(input);
 	}
 	printf("exit\n");
+	clean_shell(input);
 	return (0);
 }
