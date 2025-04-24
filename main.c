@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:23:01 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 20:15:35 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:34:16 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,13 @@ static char	*get_input(void)
 
 static void	process_input(char *input)
 {
+	t_token	*tokens;
+
 	if (!check_input(input))
 		return ;
+	tokens = tokenize(input);
+	print_tokens(tokens);
+	clean_shell(input, tokens);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -42,9 +47,7 @@ int	main(int argc, char **argv, char **env)
 			break ;
 		if (*input)
 			process_input(input);
-		free(input);
 	}
 	printf("exit\n");
-	clean_shell(input);
 	return (0);
 }

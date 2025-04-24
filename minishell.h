@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 20:15:21 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:34:14 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,26 @@ typedef struct s_cmd
 }	t_cmd;
 
 /** Fonctions de netoyage */
-void	clean_shell(char *input);
+void	free_tokens(t_token	*tokens);
+void	clean_shell(char *input, t_token *tokens);
 
 /** Input */
 char	*custom_reader();
 int		check_input(char *input);
+
+/** Tokenisation */
+t_token	*create_token(char *value, int type);
+void	add_token(t_token **tokens, t_token *new_token);
+t_token	*process_token(char *input, int *i);
+
+int		get_token_type(char *str);
+int		is_special_char(char c);
+char	*extract_operator(char *input, int *i);
+void	skip_spaces(char *input, int *i);
+void	print_tokens(t_token *tokens);
+int		token_count(t_token *tokens);
+
+char	*extract_word(char *input, int *i);
+t_token	*tokenize(char *input);
 
 #endif

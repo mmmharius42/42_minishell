@@ -1,34 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clean.c                                            :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/24 19:49:04 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 20:34:31 by aberenge         ###   ########.fr       */
+/*   Created: 2025/04/24 20:29:11 by aberenge          #+#    #+#             */
+/*   Updated: 2025/04/24 20:29:19 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-void	free_tokens(t_token	*tokens)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	t_token	*tmp;
+	int	i;
 
-	while (tokens)
-	{
-		tmp = tokens;
-		tokens = tokens->next;
-		free(tmp->value);
-		free(tmp);
-	}
-}
-
-void	clean_shell(char *input, t_token *tokens)
-{
-	if (input)
-		free(input);
-	if (tokens)
-		free_tokens(tokens);
+	i = 0;
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
