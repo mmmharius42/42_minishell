@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 20:15:21 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:29:41 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 
 # define MAX_LINE 1024
 
-#define RED "\033[0;31m"
-#define RESET "\033[0m"
+#define	RED	"\033[0;31m"
+#define	RESET	"\033[0m"
 
 # define WORD 0
 # define PIPE 1
@@ -43,7 +43,6 @@ typedef struct s_redir
 	int				type;
 	struct s_redir	*next;
 }	t_redir;
-
 
 typedef struct s_env
 {
@@ -72,5 +71,14 @@ void	clean_shell(char *input);
 /** Input */
 char	*custom_reader();
 int		check_input(char *input);
+
+//buitlin.c
+int		check_builtin(t_cmd *cmd);
+void	exec_builtin(t_cmd *cmd, char ***env);
+
+// env.c
+t_env	*env_new_var(char *name, char *value, int equal_sign);
+void	env_add_back(t_env **env, t_env *new);
+void	env_init(t_env **env_list, char **env);
 
 #endif

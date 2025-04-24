@@ -26,6 +26,7 @@ endif
 # Fichiers sources
 SRCS			= main.c src/clean.c \
 					src/input/check_input.c src/input/print_path.c \
+					src/builtin/buitlin.c src/builtin/env.c \
 
 # Dossier pour les objets
 OBJDIR			= objs
