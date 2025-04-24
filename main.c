@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:23:01 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 00:11:00 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 00:16:06 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ static void	process_input(char *input, t_env **env)
 	if (!check_input(input))
 		return ;
 	tokens = tokenize(input);
+	expand_all(tokens, *env);
 	print_tokens(tokens);
-	expand_variable(tokens, *env);
 	clean_shell(input, tokens);
 }
 

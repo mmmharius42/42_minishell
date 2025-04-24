@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 00:09:56 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 00:15:24 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ char	*get_var_name(char *value);
 char	*replace_var(char *str, char *var_name, t_env *env);
 char	*add_char_to_str(char *str, char c);
 void	expand_variable(t_token *tokens, t_env *env);
+void	expand_all(t_token *tokens, t_env *env);
 
 //buitlin.c
 int		check_builtin(t_cmd *cmd);

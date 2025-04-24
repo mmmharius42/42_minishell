@@ -6,6 +6,7 @@
 		"history.h": "c",
 		"type_traits": "c",
 		"utility": "c",
-		"cstdlib": "c"
+		"cstdlib": "c",
+		"minishell.h": "c"
 	}
 }
