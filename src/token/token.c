@@ -6,13 +6,13 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 20:17:12 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 21:08:03 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 01:14:58 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*tokenize(char *input)
+t_token	*tokenize(char *input, t_env *env)
 {
 	int		i;
 	t_token	*tokens;
@@ -35,5 +35,6 @@ t_token	*tokenize(char *input)
 		}
 		add_token(&tokens, new_token);
 	}
+	expand_all(tokens, env);
 	return (tokens);
 }

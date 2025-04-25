@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 23:51:25 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 00:09:28 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 01:13:14 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ char	*replace_var(char *str, char *var_name, t_env *env)
 	env_value = get_env_value(env, var_name);
 	if (!env_value)
 		env_value = "";
-
 	result = ft_strjoin(str, env_value);
 	free(str);
 	free(var_name);

@@ -6,7 +6,6 @@
 /*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 01:42:11 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +64,14 @@ typedef struct s_token
 
 typedef struct s_cmd
 {
-	char	*path;
-	char	**args;
+	char			*path;
+	char			**args;
+	t_redir			*redir;
+	t_token			*tokens;
+	struct s_cmd	*next;
 }	t_cmd;
+
+extern int	g_return_code;
 
 /** Utils */
 int		ft_is_path(char c);
@@ -75,14 +79,17 @@ int		ft_is_path(char c);
 /** Fonctions de netoyage */
 void	free_tokens(t_token	*tokens);
 void	free_env(t_env *env);
-void	clean_shell(char *input, t_token *tokens);
+void	clean_shell(char *input, t_token *tokens, t_cmd *cmd);
+void	*free_commands(t_cmd *cmd_list);
+void	free_command(t_cmd *cmd);
+void	free_redirections(t_redir *redir);
 
 /** Input */
 char	*custom_reader(void);
 int		check_input(char *input);
 
 /** Token */
-t_token	*tokenize(char *input);
+t_token	*tokenize(char *input, t_env *env);
 t_token	*create_token(char *value, int type, int is_single_quote,
 			int is_double_quote);
 t_token	*process_token(char *input, int *i);
@@ -93,7 +100,6 @@ char	*extract_operator(char *input, int *i);
 int		get_token_type(char *str);
 int		is_special_char(char c);
 void	skip_spaces(char *input, int *i);
-void	print_tokens(t_token *tokens);
 int		token_count(t_token *tokens);
 
 /** Expand */
@@ -104,9 +110,42 @@ void	expand_variable(t_token *tokens, t_env *env);
 void	expand_tilde(t_token *tokens, t_env *env);
 void	expand_all(t_token *tokens, t_env *env);
 
+/** Parsing */
+t_cmd	*parse_tokens(t_token *tokens);
+int		process_token_to_cmd(t_token *token, t_cmd **current_cmd,
+		t_cmd **cmd_list);
+int		is_redirection(int type);
+void	add_token_to_cmd(t_token *token, t_cmd *cmd);
+int		parse_error(char *message);
+
+t_cmd	*create_command(void);
+void	add_command(t_cmd **cmd_list, t_cmd *cmd);
+int		process_redirection(t_token *token, t_cmd **cmd);
+t_redir	*create_redirection(int type, char *file);
+void	add_redirection(t_redir **redir_list, t_redir *redir);
+int		apply_redirections(t_redir *redir);
+int		redirect_error(char *file);
+
+int		count_args(t_token *tokens);
+char	**fill_args(t_token *tokens, int count);
+int		prepare_args(t_cmd *cmd);
+int		prepare_all_args(t_cmd *cmd_list);
+int		resolve_paths(t_cmd *cmd_list, t_env *env);
+
+int		is_executable(char *path);
+char	*create_path(char *dir, char *file);
+char	*find_executable(char *cmd, char *path_env);
+int		is_builtin(char *cmd);
+int		finalize_commands(t_cmd *cmd_list, t_env *env);
+
+t_cmd	*parse(t_token *tokens, t_env **env);
+
 //buitlin.c
 int		check_builtin(t_cmd *cmd);
 void	exec_builtin(t_cmd *cmd, char ***env);
+
+// pwd.c
+void	ft_pwd(void);
 
 // env.c
 t_env	*env_new_var(char *name, char *value, int equal_sign);
@@ -126,5 +165,7 @@ void	load_history(void);
 void	save_history(char *input);
 void	ft_history(void);
 
+// Execution
+void	exec(t_cmd *cmd, t_env **env);
 
 #endif
