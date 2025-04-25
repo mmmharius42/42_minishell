@@ -137,7 +137,7 @@ static void process_input(char *input, t_env **env)
 	tokens = tokenize(input, *env);
 	cmd = parse(tokens, env);
 	if (cmd)
-		print_cmd_info(cmd);
+		exec(cmd, env);
 	clean_shell(input, tokens, cmd);
 }
 
