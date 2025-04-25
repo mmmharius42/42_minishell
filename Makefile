@@ -33,8 +33,8 @@ SRCS			= main.c src/clean.c \
 					src/expand/variable_expand.c src/expand/variable_expand_utils.c \
 					src/expand/tilde_expand.c \
 					libs/utils/ft_is_path.c libs/utils/ft_env_utils.c \
-					libs/utils/ft_env_utils2.c \
-					src/builtin/buitlin.c \
+					libs/utils/ft_env_utils2.c libs/utils/ft_env_utils3.c\
+					src/builtin/buitlin.c src/buitlin/history.c\
 					src/builtin/env.c
 
 # Dossier pour les objets

@@ -6,7 +6,7 @@
 /*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:45:47 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 01:19:30 by mpapin           ###   ########.fr       */
+/*   Updated: 2025/04/25 01:31:29 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	set_env_value(t_env *env_list, char *name, char *value)
 				free(env_list->value);
 			env_list->value = ft_strdup(value);
 			env_list->equal_sign = 1;
-			return;
+			return ;
 		}
 		env_list = env_list->next;
 	}
@@ -87,3 +87,23 @@ int	var_exists(t_env *env, char *var)
 	return (0);
 }
 
+void	update_var(t_env *env, char *name, char *value, int equal)
+{
+	while (env)
+	{
+		if (ft_strcmp(env->name, name) == 0)
+		{
+			if (equal)
+			{
+				free(env->value);
+				if (value)
+					env->value = ft_strdup(value);
+				else
+					env->value = NULL;
+				env->equal_sign = 1;
+			}
+			return ;
+		}
+		env = env->next;
+	}
+}

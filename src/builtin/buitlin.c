@@ -48,7 +48,7 @@
 // 	else if (ft_strncmp(cmd->args[0], "env", 4) == 0)
 // 		ft_env(*env);
 // 	else if (ft_strncmp(cmd->args[0], "export", 7) == 0)
-// 		ft_export(cmd, env);
+// 		ft_export(cmd->args, env);
 // 	else if (ft_strncmp(cmd->args[0], "unset", 6) == 0)
 // 		ft_unset(cmd, env);
 // 	else if (ft_strncmp(cmd->args[0], "cd", 3) == 0)
