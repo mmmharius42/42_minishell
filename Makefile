@@ -36,11 +36,10 @@ SRCS			= main.c src/clean.c \
 					src/parsing/parse_path.c src/parsing/parse_redir.c \
 					src/parsing/parse.c src/parsing/parse_utils.c \
 					libs/utils/ft_is_path.c libs/utils/ft_env_utils.c \
-					libs/utils/ft_env_utils2.c libs/utils/ft_env_utils3.c\
-					src/builtin/buitlin.c src/buitlin/history.c\
 					libs/utils/ft_env_utils2.c \
 					src/builtin/buitlin.c \
-					src/builtin/env.c
+					src/builtin/env.c \
+					src/exec/exec.c
 
 # Dossier pour les objets
 OBJDIR			= objs
