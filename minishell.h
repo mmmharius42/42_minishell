@@ -145,6 +145,9 @@ t_cmd	*parse(t_token *tokens, t_env **env);
 int		check_builtin(t_cmd *cmd);
 void	exec_builtin(t_cmd *cmd, char ***env);
 
+// pwd.c
+void	ft_pwd(void);
+
 // env.c
 t_env	*env_new_var(char *name, char *value, int equal_sign);
 void	env_add_back(t_env **env, t_env *new);
@@ -154,5 +157,8 @@ void	set_env_value(t_env *env_list, char *name, char *value);
 void	unset_env_var(t_env **env_list, char *name);
 char	*get_name(char *str);
 char	*get_value(char *str);
+
+// Execution
+void	exec(t_cmd *cmd, t_env **env);
 
 #endif
