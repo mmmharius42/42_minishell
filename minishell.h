@@ -72,6 +72,7 @@ typedef struct s_cmd
 }	t_cmd;
 
 extern int	g_return_code;
+extern int	g_heredoc_interrupted;
 
 /** Utils */
 int		ft_is_path(char c);

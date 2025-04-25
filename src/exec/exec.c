@@ -13,6 +13,7 @@
 #include "minishell.h"
 
 int	g_return_code = 0;
+int	g_heredoc_interrupted = 0;
 
 static char	**env_to_array(t_env *env)
 {
@@ -54,6 +55,10 @@ static void	execute_command(t_cmd *cmd, t_env *env)
 {
 	char	**env_array;
 
+	// Appliquer les redirections (entrée/sortie) avant l'exécution de la commande
+	if (cmd->redir && !apply_redirections(cmd->redir))
+		exit(1);
+	
 	env_array = env_to_array(env);
 	if (!env_array)
 		exit(1);
@@ -66,6 +71,32 @@ static void	execute_command(t_cmd *cmd, t_env *env)
 	}
 }
 
+static void	execute_builtin_with_redir(t_cmd *cmd, t_env **env)
+{
+	int		stdin_backup;
+	int		stdout_backup;
+	
+	// Sauvegarder les descripteurs de fichiers standards
+	stdin_backup = dup(STDIN_FILENO);
+	stdout_backup = dup(STDOUT_FILENO);
+	
+	// Appliquer les redirections si elles existent
+	if (cmd->redir && !apply_redirections(cmd->redir))
+	{
+		g_return_code = 1;
+		return;
+	}
+	
+	// Exécuter la commande builtin
+	exec_builtin(cmd, (char ***)env);
+	
+	// Restaurer les descripteurs standards
+	dup2(stdin_backup, STDIN_FILENO);
+	dup2(stdout_backup, STDOUT_FILENO);
+	close(stdin_backup);
+	close(stdout_backup);
+}
+
 static void	execute_simple_command(t_cmd *cmd, t_env **env)
 {
 	pid_t	pid;
@@ -74,7 +105,7 @@ static void	execute_simple_command(t_cmd *cmd, t_env **env)
 	// Commande builtin sans pipe: exécuter directement sans fork
 	if (check_builtin(cmd))
 	{
-		exec_builtin(cmd, (char ***)env);
+		execute_builtin_with_redir(cmd, env);
 		return;
 	}
 	
@@ -126,6 +157,11 @@ static void	execute_piped_commands(t_cmd *cmd_list, t_env *env)
 				dup2(pipe_fd[1], STDOUT_FILENO);
 				close(pipe_fd[1]);
 			}
+			
+			// Appliquer les redirections spécifiques à cette commande
+			if (current->redir && !apply_redirections(current->redir))
+				exit(1);
+				
 			// Exécuter la commande builtin ou externe
 			if (check_builtin(current))
 				exec_builtin(current, (char ***)&env);
