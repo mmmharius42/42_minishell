@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 01:10:51 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 01:46:14 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 02:46:31 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ t_cmd	*parse_tokens(t_token *tokens)
 	t_cmd	*current_cmd;
 	t_token	*current_token;
 
-	if (!tokens)
-		return (NULL);
 	cmd_list = NULL;
 	current_cmd = create_command();
 	if (!current_cmd)
@@ -35,7 +33,7 @@ t_cmd	*parse_tokens(t_token *tokens)
 		}
 		current_token = current_token->next;
 	}
-	if (current_cmd && current_cmd->redir)
+	if (current_cmd && (current_cmd->tokens || current_cmd->redir))
 		add_command(&cmd_list, current_cmd);
 	else if (current_cmd)
 		free_command(current_cmd);

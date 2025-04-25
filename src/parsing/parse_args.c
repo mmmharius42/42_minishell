@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 01:40:51 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 01:46:21 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/25 02:47:02 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	**fill_args(t_token *tokens, int count)
 	int		i;
 	t_token	*current;
 
-	args = (char **)malloc(sizeof(char *) * (count + 1));
+	args = (char **) malloc(sizeof(char *) * (count + 1));
 	if (!args)
 		return (NULL);
 	i = 0;
@@ -126,8 +126,8 @@ int	resolve_paths(t_cmd *cmd_list, t_env *env)
 	path_env = get_env_value(env, "PATH");
 	while (current)
 	{
-		if (current->path && current->path[0] != '/' &&
-				ft_strncmp(current->path, "./", 2) != 0)
+		if (current->path && current->path[0] != '/'
+			&& ft_strncmp(current->path, "./", 2) != 0)
 		{
 			exec_path = find_executable(current->path, path_env);
 			if (exec_path)
