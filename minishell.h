@@ -3,10 +3,9 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 01:35:36 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,8 +154,16 @@ void	env_init(t_env **env_list, char **env);
 char	*get_env_value(t_env *env_list, char *name);
 void	set_env_value(t_env *env_list, char *name, char *value);
 void	unset_env_var(t_env **env_list, char *name);
+int		var_exists(t_env *env, char *var);
+void	update_var(t_env *env, char *name, char *value, int equal);
 char	*get_name(char *str);
 char	*get_value(char *str);
+
+//history.c
+char	*get_history_file_path(void);
+void	load_history(void);
+void	save_history(char *input);
+void	ft_history(void);
 
 // Execution
 void	exec(t_cmd *cmd, t_env **env);
