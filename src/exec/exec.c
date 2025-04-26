@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 17:47:09 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 19:48:33 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:20:43 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,11 @@ static void	execute_simple_command(t_cmd *cmd, t_env **env)
 	pid_t	pid;
 	int		status;
 
-	// Commande builtin sans pipe: exécuter directement sans fork
 	if (check_builtin(cmd))
 	{
-		exec_builtin(cmd, (char ***)env);
+		exec_builtin(cmd, env);
 		return;
 	}
-	
 	// Commande externe: fork nécessaire
 	pid = fork();
 	if (pid == -1)
@@ -110,9 +108,11 @@ static void	execute_piped_commands(t_cmd *cmd_list, t_env *env)
 	prev_pipe = -1;
 	while (current)
 	{
-		if (current->next)
-			pipe(pipe_fd);
+		if (current->next && pipe(pipe_fd) == -1)
+			return ;
 		pid = fork();
+		if (pid == -1)
+			return ;
 		if (pid == 0)
 		{
 			if (prev_pipe != -1)
@@ -126,11 +126,13 @@ static void	execute_piped_commands(t_cmd *cmd_list, t_env *env)
 				dup2(pipe_fd[1], STDOUT_FILENO);
 				close(pipe_fd[1]);
 			}
-			// Exécuter la commande builtin ou externe
 			if (check_builtin(current))
-				exec_builtin(current, (char ***)&env);
+				exec_builtin(current, &env);
 			else
 				execute_command(current, env);
+			close(0);
+			close(1);
+			close(2);
 			exit(0);
 		}
 		if (prev_pipe != -1)
@@ -140,6 +142,8 @@ static void	execute_piped_commands(t_cmd *cmd_list, t_env *env)
 			close(pipe_fd[1]);
 			prev_pipe = pipe_fd[0];
 		}
+		else
+			prev_pipe = -1;
 		current = current->next;
 	}
 	current = cmd_list;
