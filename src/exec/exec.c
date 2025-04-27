@@ -57,7 +57,7 @@ static void	execute_command(t_cmd *cmd, t_env *env)
 
 	// Appliquer les redirections (entrée/sortie) avant l'exécution de la commande
 	if (cmd->redir && !apply_redirections(cmd->redir))
-		exit(1);
+		exit(g_return_code);
 	
 	env_array = env_to_array(env);
 	if (!env_array)
@@ -119,7 +119,7 @@ static void	execute_simple_command(t_cmd *cmd, t_env **env)
 	if (pid == 0)
 	{
 		execute_command(cmd, *env);
-		exit(0);
+		exit(g_return_code);
 	}
 	else
 	{
@@ -160,14 +160,14 @@ static void	execute_piped_commands(t_cmd *cmd_list, t_env *env)
 			
 			// Appliquer les redirections spécifiques à cette commande
 			if (current->redir && !apply_redirections(current->redir))
-				exit(1);
+				exit(g_return_code);
 				
 			// Exécuter la commande builtin ou externe
 			if (check_builtin(current))
 				exec_builtin(current, (char ***)&env);
 			else
 				execute_command(current, env);
-			exit(0);
+			exit(g_return_code);
 		}
 		if (prev_pipe != -1)
 			close(prev_pipe);
@@ -190,8 +190,36 @@ static void	execute_piped_commands(t_cmd *cmd_list, t_env *env)
 
 void	exec(t_cmd *cmd, t_env **env)
 {
-	if (!cmd || !cmd->path)
+	if (!cmd)
 		return;
+	
+	// Traiter les redirections même s'il n'y a pas de commande à exécuter
+	if (!cmd->path && cmd->redir)
+	{
+		pid_t pid;
+		int status;
+		
+		pid = fork();
+		if (pid == 0)
+		{
+			// Appliquer les redirections
+			if (!apply_redirections(cmd->redir))
+				exit(g_return_code);
+			exit(0);
+		}
+		else
+		{
+			waitpid(pid, &status, 0);
+			if (WIFEXITED(status))
+				g_return_code = WEXITSTATUS(status);
+			return;
+		}
+	}
+	
+	// Exécuter la commande si elle existe
+	if (!cmd->path)
+		return;
+	
 	if (!cmd->next)
 		execute_simple_command(cmd, env);
 	else

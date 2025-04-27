@@ -233,7 +233,10 @@ int	apply_redirections(t_redir *redir)
 		else
 			continue ;
 		if (fd == -1)
+		{
+			g_return_code = 1;
 			return (redirect_error(current->file));
+		}
 		if (current->type == REDIR_IN || current->type == HEREDOC)
 			dup2(fd, STDIN_FILENO);
 		else
@@ -262,5 +265,6 @@ int	redirect_error(char *file)
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(strerror(errno), 2);
 	ft_putstr_fd("\n", 2);
+	g_return_code = 1;
 	return (0);
 }
