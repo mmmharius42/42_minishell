@@ -6,7 +6,7 @@
 /*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 23:48:23 by mpapin            #+#    #+#             */
-/*   Updated: 2025/04/25 01:39:13 by mpapin           ###   ########.fr       */
+/*   Updated: 2025/04/27 14:38:55 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	check_arg(char *arg)
 {
 	int	i;
 
-	if (!arg || (!isalpha(arg[0]) && arg[0] != '_'))
+	if (!arg || (!ft_isalpha(arg[0]) && arg[0] != '_'))
 	{
 		printf("bash: export: `%s': not a valid identifier\n", arg);
 		return (0);
@@ -24,7 +24,7 @@ int	check_arg(char *arg)
 	i = 1;
 	while (arg[i] && arg[i] != '=')
 	{
-		if (!isalnum(arg[i]) && arg[i] != '_')
+		if (!ft_isalnum(arg[i]) && arg[i] != '_')
 		{
 			printf("bash: export: `%s': not a valid identifier\n", arg);
 			return (0);
