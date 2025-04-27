@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 23:59:10 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 00:03:40 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:05:22 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,20 @@ char	*get_value(char *str)
 {
 	char	*equal;
 	char	*value;
+	char	*cleaned;
 
 	equal = ft_strchr(str, '=');
-	if (equal == NULL)
+	if (!equal)
 		return (NULL);
 	value = ft_strdup(equal + 1);
+	if (!value)
+		return (NULL);
+	if (value[0] == '\"' && ft_strlen(value) >= 2
+		&& value[ft_strlen(value) - 1] == '\"')
+	{
+		cleaned = clean_quotes(value);
+		free(value);
+		return (cleaned);
+	}
 	return (value);
 }

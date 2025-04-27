@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_path.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:53:35 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 20:43:48 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/27 15:11:21 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static char	*print_path(void)
 		last_slash--;
 	if (*last_slash == '/')
 		last_slash++;
+	if (*last_slash == '\0')
+		last_slash = "/";
 	result = malloc(ft_strlen(last_slash) + ft_strlen(RED)
 			+ ft_strlen(" ➜  ") + ft_strlen(RESET) + 1);
 	if (!result)
@@ -38,6 +40,7 @@ static char	*print_path(void)
 	ft_strcat(result, RESET);
 	return (result);
 }
+
 
 char	*custom_reader(void)
 {

@@ -6,6 +6,7 @@
 /*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
+/*   Updated: 2025/04/27 14:26:08 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,12 +145,28 @@ t_cmd	*parse(t_token *tokens, t_env **env);
 
 //buitlin.c
 int		check_builtin(t_cmd *cmd);
-void	exec_builtin(t_cmd *cmd, char ***env);
+// void	exec_builtin(t_cmd *cmd, char ***env);
+void	exec_builtin(t_cmd *cmd, t_env **env);
 
 // pwd.c
 void	ft_pwd(void);
 
+//  unset.c
+void    ft_unset(t_cmd *cmd, t_env **env);
+
+
+// cd.c
+void	ft_cd(t_cmd *cmd, t_env **env);
+char	*get_pwd_value(void);
+void	export_variable(const char *name, const char *value, t_env **env);
+char	*get_target_path(t_cmd *cmd, t_env *env);
+void	update_pwd_env(t_env **env, char *old_pwd);
+
+// echo.c
+void	ft_echo(char **args);
+
 // env.c
+void	ft_env(t_env *env_list);
 t_env	*env_new_var(char *name, char *value, int equal_sign);
 void	env_add_back(t_env **env, t_env *new);
 void	env_init(t_env **env_list, char **env);
@@ -160,6 +177,12 @@ int		var_exists(t_env *env, char *var);
 void	update_var(t_env *env, char *name, char *value, int equal);
 char	*get_name(char *str);
 char	*get_value(char *str);
+void	sort_env(t_env **var, int size);
+int		env_len(t_env *env);
+char	*clean_quotes(char *value);
+
+// export.c
+void	ft_export(char **args, t_env **env);
 
 //history.c
 char	*get_history_file_path(void);
