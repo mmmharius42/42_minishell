@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 01:30:51 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 01:40:02 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:01:03 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,30 +79,7 @@ void	add_redirection(t_redir **redir_list, t_redir *redir)
 }
 
 /*
-** Fonction obsolète, remplacée par les gestionnaires dans signals/signals.c
-*/
-
-/*
-** Configure les gestionnaires de signaux pour le mode heredoc
-*/
-/*
-** Utilise le gestionnaire de signaux dédié au heredoc
-*/
-static void	setup_heredoc_signals(void)
-{
-	setup_signals_heredoc();
-}
-
-/*
-** Restaure les gestionnaires de signaux interactifs
-*/
-static void	reset_signals(void)
-{
-	setup_signals_interactive();
-}
-
-/*
-** Lit et stocke l'entrée du heredoc jusqu'à ce que 
+** Lit et stocke l'entrée du heredoc jusqu'à ce que
 ** le délimiteur soit trouvé.
 ** Retourne un descripteur de fichier pour lire le contenu,
 ** ou -1 en cas d'erreur.
@@ -113,11 +90,9 @@ static int	handle_heredoc(char *delimiter)
 	int		pipe_fd[2];
 	pid_t	pid;
 	int		status;
-	
-	g_heredoc_interrupted = 0;
+
 	if (pipe(pipe_fd) == -1)
 		return (-1);
-	
 	pid = fork();
 	if (pid == -1)
 	{
@@ -125,59 +100,35 @@ static int	handle_heredoc(char *delimiter)
 		close(pipe_fd[1]);
 		return (-1);
 	}
-	
 	if (pid == 0)
 	{
-		// Process enfant pour lire l'entrée
-		setup_heredoc_signals();
-		close(pipe_fd[0]);  // Fermer l'extrémité de lecture dans l'enfant
-		
+		setup_signals_heredoc();
+		close(pipe_fd[0]);
 		while (1)
 		{
-			// Lire depuis l'entrée standard
 			line = readline("> ");
 			if (!line || ft_strcmp(line, delimiter) == 0)
 			{
 				if (line)
 					free(line);
-				break;
+				break ;
 			}
-			
-			// Écrire dans le pipe
 			ft_putstr_fd(line, pipe_fd[1]);
 			ft_putstr_fd("\n", pipe_fd[1]);
 			free(line);
 		}
-		
 		close(pipe_fd[1]);
 		exit(0);
 	}
-	
-	// Processus parent
-	close(pipe_fd[1]);  // Fermer l'extrémité d'écriture dans le parent
-	
-	// Attendre la fin du processus enfant
+	close(pipe_fd[1]);
 	waitpid(pid, &status, 0);
-	
-	// Restaurer les signaux par défaut
-	reset_signals();
-	
-	// Vérifier si l'enfant a été interrompu par un signal
-	if (WIFSIGNALED(status))
+	setup_signals_interactive();
+	if (WIFSIGNALED(status) || (WIFEXITED(status) && WEXITSTATUS(status) == 130))
 	{
-		g_heredoc_interrupted = 1;
+		g_return_code = 130;
 		close(pipe_fd[0]);
-		return (-1);
+		return (-130);
 	}
-	
-	// Vérifier le code de sortie
-	if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
-	{
-		g_heredoc_interrupted = 1;
-		close(pipe_fd[0]);
-		return (-1);
-	}
-	
 	return (pipe_fd[0]);
 }
 
@@ -202,9 +153,8 @@ int	apply_redirections(t_redir *redir)
 		else if (current->type == HEREDOC)
 		{
 			fd = handle_heredoc(current->file);
-			if (g_heredoc_interrupted)
+			if (fd == -130)
 			{
-				g_return_code = 130;
 				ft_putstr_fd("minishell: heredoc interrompu\n", 2);
 				return (0);
 			}
@@ -232,13 +182,11 @@ int	apply_redirections(t_redir *redir)
 */
 int	redirect_error(char *file)
 {
-	// Si le fichier est NULL, c'est probablement dû à un heredoc interrompu
 	if (!file)
 	{
 		ft_putstr_fd("minishell: heredoc interrompu\n", 2);
 		return (0);
 	}
-	
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(file, 2);
 	ft_putstr_fd(": ", 2);

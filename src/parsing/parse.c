@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 01:10:51 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 02:46:31 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:00:12 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,12 @@ t_cmd	*parse_tokens(t_token *tokens)
 	{
 		if (is_redirection(current_token->type))
 		{
-			// Process redirection and skip filename token
 			if (!process_redirection(current_token, &current_cmd))
 			{
 				free_commands(cmd_list);
 				free_command(current_cmd);
 				return (NULL);
 			}
-			// Skip the filename token
 			if (current_token->next)
 				current_token = current_token->next;
 		}

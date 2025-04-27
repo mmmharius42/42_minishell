@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/27 14:26:08 by mpapin           ###   ########.fr       */
+/*   Updated: 2025/04/27 21:16:27 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ typedef struct s_cmd
 }	t_cmd;
 
 extern int	g_return_code;
-extern int	g_heredoc_interrupted;
 
 /** Utils */
 int		ft_is_path(char c);
@@ -192,6 +191,20 @@ void	ft_history(void);
 
 // Execution
 void	exec(t_cmd *cmd, t_env **env);
+void	execute_simple_command(t_cmd *cmd, t_env **env);
+void	execute_piped_commands(t_cmd *cmd_list, t_env *env);
+void	execute_command(t_cmd *cmd, t_env *env);
+void	handle_builtin(t_cmd *cmd, t_env **env);
+void	handle_fork_error(void);
+void	wait_for_child(pid_t pid);
+void	handle_redir_only(t_cmd *cmd);
+void	handle_input_pipe(int prev_pipe);
+void	handle_output_pipe(int *pipe_fd);
+void	execute_piped_child(t_cmd *cmd, t_env *env, int prev_pipe, int *pipe_fd);
+void	update_pipe_status(int *prev_pipe, int *pipe_fd, t_cmd *current);
+void	wait_for_all_children(t_cmd *cmd_list);
+char	**env_to_array(t_env *env);
+char	**fill_env_array(t_env *env, char **env_array);
 
 // Signals
 void	setup_signals_interactive(void);

@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 01:40:51 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/25 02:47:02 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:01:14 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,23 +78,16 @@ int	prepare_args(t_cmd *cmd)
 
 	if (!cmd)
 		return (0);
-	
-	// Si on a seulement des redirections sans commande, c'est valide
 	if (!cmd->tokens && cmd->redir)
 		return (1);
-	
-	// Si pas de tokens du tout, pas de commande à préparer
 	if (!cmd->tokens)
 		return (0);
-	
 	count = count_args(cmd->tokens);
 	if (count == 0)
-		return (1);  // Même sans arguments, c'est OK si on a des redirections
-	
+		return (1);
 	cmd->args = fill_args(cmd->tokens, count);
 	if (!cmd->args)
 		return (0);
-	
 	cmd->path = ft_strdup(cmd->args[0]);
 	if (!cmd->path)
 	{
@@ -117,7 +110,6 @@ int	prepare_all_args(t_cmd *cmd_list)
 	current = cmd_list;
 	while (current)
 	{
-		// Si on a des redirections mais pas de tokens, c'est valide
 		if (current->redir && !current->tokens)
 			current = current->next;
 		else if (!prepare_args(current))
@@ -144,13 +136,11 @@ int	resolve_paths(t_cmd *cmd_list, t_env *env)
 	path_env = get_env_value(env, "PATH");
 	while (current)
 	{
-		// Si on a seulement des redirections sans commande, c'est valide
 		if (!current->path && current->redir)
 		{
 			current = current->next;
-			continue;
+			continue ;
 		}
-		
 		if (current->path && current->path[0] != '/'
 			&& ft_strncmp(current->path, "./", 2) != 0)
 		{
