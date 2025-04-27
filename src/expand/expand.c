@@ -14,6 +14,7 @@
 
 void	expand_all(t_token *tokens, t_env *env)
 {
+	expand_exit_code(tokens);
 	expand_variable(tokens, env);
 	expand_tilde(tokens, env);
 }

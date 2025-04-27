@@ -79,47 +79,26 @@ void	add_redirection(t_redir **redir_list, t_redir *redir)
 }
 
 /*
-** Gère les signaux pendant l'exécution du heredoc
+** Fonction obsolète, remplacée par les gestionnaires dans signals/signals.c
 */
-static void	handle_heredoc_signals(int signum)
-{
-	(void)signum;
-	write(STDERR_FILENO, "\n", 1);
-	g_heredoc_interrupted = 1;
-	exit(130);  // 128 + SIGINT
-}
 
 /*
 ** Configure les gestionnaires de signaux pour le mode heredoc
 */
+/*
+** Utilise le gestionnaire de signaux dédié au heredoc
+*/
 static void	setup_heredoc_signals(void)
 {
-	struct sigaction	sa;
-
-	sa.sa_handler = handle_heredoc_signals;
-	sa.sa_flags = 0;
-	sigemptyset(&sa.sa_mask);
-	sigaction(SIGINT, &sa, NULL);
-	
-	// Ignorer SIGQUIT
-	signal(SIGQUIT, SIG_IGN);
+	setup_signals_heredoc();
 }
 
 /*
-** Restaure les gestionnaires de signaux par défaut
-** Note: Cette fonction devrait être appelée dans le parent
-** après l'exécution du heredoc si nécessaire.
+** Restaure les gestionnaires de signaux interactifs
 */
 static void	reset_signals(void)
 {
-	struct sigaction	sa;
-
-	sa.sa_handler = SIG_DFL;
-	sa.sa_flags = 0;
-	sigemptyset(&sa.sa_mask);
-	
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	setup_signals_interactive();
 }
 
 /*

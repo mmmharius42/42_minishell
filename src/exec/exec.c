@@ -55,6 +55,9 @@ static void	execute_command(t_cmd *cmd, t_env *env)
 {
 	char	**env_array;
 
+	// Configuration des signaux pour les processus enfant
+	setup_signals_child();
+
 	// Appliquer les redirections (entrée/sortie) avant l'exécution de la commande
 	if (cmd->redir && !apply_redirections(cmd->redir))
 		exit(g_return_code);
@@ -199,9 +202,13 @@ void	exec(t_cmd *cmd, t_env **env)
 		pid_t pid;
 		int status;
 		
+		setup_signals_parent(); // Ignorer les signaux dans le parent
+		
 		pid = fork();
 		if (pid == 0)
 		{
+			setup_signals_child(); // Définir les gestionnaires pour l'enfant
+			
 			// Appliquer les redirections
 			if (!apply_redirections(cmd->redir))
 				exit(g_return_code);
@@ -210,6 +217,8 @@ void	exec(t_cmd *cmd, t_env **env)
 		else
 		{
 			waitpid(pid, &status, 0);
+			setup_signals_interactive(); // Restaurer les gestionnaires interactifs
+			
 			if (WIFEXITED(status))
 				g_return_code = WEXITSTATUS(status);
 			return;
@@ -220,8 +229,14 @@ void	exec(t_cmd *cmd, t_env **env)
 	if (!cmd->path)
 		return;
 	
+	// Configurer les signaux avant l'exécution
+	setup_signals_parent(); // Ignorer les signaux dans le processus parent
+	
 	if (!cmd->next)
 		execute_simple_command(cmd, env);
 	else
 		execute_piped_commands(cmd, *env);
+		
+	// Réinitialiser les signaux après l'exécution
+	setup_signals_interactive();
 }
