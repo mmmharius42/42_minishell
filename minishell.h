@@ -6,7 +6,7 @@
 /*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/26 16:04:15 by mpapin           ###   ########.fr       */
+/*   Updated: 2025/04/27 14:26:08 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,10 @@ void	exec_builtin(t_cmd *cmd, t_env **env);
 
 // pwd.c
 void	ft_pwd(void);
+
+//  unset.c
+void    ft_unset(t_cmd *cmd, t_env **env);
+
 
 // cd.c
 void	ft_cd(t_cmd *cmd, t_env **env);

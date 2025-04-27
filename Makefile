@@ -39,7 +39,8 @@ SRCS			= main.c src/clean.c \
 					libs/utils/ft_env_utils2.c libs/utils/ft_env_utils3.c\
 					src/builtin/buitlin.c src/builtin/cd.c src/builtin/echo.c \
 					src/builtin/env.c src/builtin/export.c src/builtin/pwd.c\
-					src/exec/exec.c
+					src/builtin/history.c src/builtin/unset.c src/exec/exec.c\
+					libs/gnl/get_next_line.c \
 
 # Dossier pour les objets
 OBJDIR			= objs
