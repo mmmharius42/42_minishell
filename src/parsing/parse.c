@@ -25,7 +25,20 @@ t_cmd	*parse_tokens(t_token *tokens)
 	current_token = tokens;
 	while (current_token)
 	{
-		if (!process_token_to_cmd(current_token, &current_cmd, &cmd_list))
+		if (is_redirection(current_token->type))
+		{
+			// Process redirection and skip filename token
+			if (!process_redirection(current_token, &current_cmd))
+			{
+				free_commands(cmd_list);
+				free_command(current_cmd);
+				return (NULL);
+			}
+			// Skip the filename token
+			if (current_token->next)
+				current_token = current_token->next;
+		}
+		else if (!process_token_to_cmd(current_token, &current_cmd, &cmd_list))
 		{
 			free_commands(cmd_list);
 			free_command(current_cmd);
