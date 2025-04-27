@@ -72,6 +72,7 @@ typedef struct s_cmd
 }	t_cmd;
 
 extern int	g_return_code;
+extern int	g_heredoc_interrupted;
 
 /** Utils */
 int		ft_is_path(char c);
@@ -108,6 +109,7 @@ char	*replace_var(char *str, char *var_name, t_env *env);
 char	*add_char_to_str(char *str, char c);
 void	expand_variable(t_token *tokens, t_env *env);
 void	expand_tilde(t_token *tokens, t_env *env);
+void	expand_exit_code(t_token *tokens);
 void	expand_all(t_token *tokens, t_env *env);
 
 /** Parsing */
@@ -167,5 +169,11 @@ void	ft_history(void);
 
 // Execution
 void	exec(t_cmd *cmd, t_env **env);
+
+// Signals
+void	setup_signals_interactive(void);
+void	setup_signals_heredoc(void);
+void	setup_signals_child(void);
+void	setup_signals_parent(void);
 
 #endif

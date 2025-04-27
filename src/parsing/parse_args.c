@@ -70,19 +70,31 @@ char	**fill_args(t_token *tokens, int count)
 /*
 ** Prépare les arguments pour une commande à partir des tokens.
 ** Retourne 1 en cas de succès, 0 en cas d'erreur.
+** Une commande sans tokens mais avec des redirections est valide.
 */
 int	prepare_args(t_cmd *cmd)
 {
 	int	count;
 
-	if (!cmd || !cmd->tokens)
+	if (!cmd)
 		return (0);
+	
+	// Si on a seulement des redirections sans commande, c'est valide
+	if (!cmd->tokens && cmd->redir)
+		return (1);
+	
+	// Si pas de tokens du tout, pas de commande à préparer
+	if (!cmd->tokens)
+		return (0);
+	
 	count = count_args(cmd->tokens);
 	if (count == 0)
-		return (0);
+		return (1);  // Même sans arguments, c'est OK si on a des redirections
+	
 	cmd->args = fill_args(cmd->tokens, count);
 	if (!cmd->args)
 		return (0);
+	
 	cmd->path = ft_strdup(cmd->args[0]);
 	if (!cmd->path)
 	{
@@ -96,6 +108,7 @@ int	prepare_args(t_cmd *cmd)
 /*
 ** Prépare les arguments pour toutes les commandes d'une liste.
 ** Retourne 1 en cas de succès, 0 en cas d'erreur.
+** Prend en compte les commandes qui n'ont que des redirections.
 */
 int	prepare_all_args(t_cmd *cmd_list)
 {
@@ -104,9 +117,13 @@ int	prepare_all_args(t_cmd *cmd_list)
 	current = cmd_list;
 	while (current)
 	{
-		if (!prepare_args(current))
+		// Si on a des redirections mais pas de tokens, c'est valide
+		if (current->redir && !current->tokens)
+			current = current->next;
+		else if (!prepare_args(current))
 			return (0);
-		current = current->next;
+		else
+			current = current->next;
 	}
 	return (1);
 }
@@ -115,6 +132,7 @@ int	prepare_all_args(t_cmd *cmd_list)
 ** Remplace les chemins relatifs des commandes par leurs chemins absolus.
 ** Utilise la variable d'environnement PATH pour chercher les exécutables.
 ** Retourne 1 en cas de succès, 0 en cas d'erreur.
+** Prend en compte les commandes qui n'ont que des redirections.
 */
 int	resolve_paths(t_cmd *cmd_list, t_env *env)
 {
@@ -126,6 +144,13 @@ int	resolve_paths(t_cmd *cmd_list, t_env *env)
 	path_env = get_env_value(env, "PATH");
 	while (current)
 	{
+		// Si on a seulement des redirections sans commande, c'est valide
+		if (!current->path && current->redir)
+		{
+			current = current->next;
+			continue;
+		}
+		
 		if (current->path && current->path[0] != '/'
 			&& ft_strncmp(current->path, "./", 2) != 0)
 		{
