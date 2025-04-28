@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_path.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:53:35 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/27 15:11:21 by mpapin           ###   ########.fr       */
+/*   Updated: 2025/04/27 21:02:02 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ static char	*print_path(void)
 	ft_strcat(result, RESET);
 	return (result);
 }
-
 
 char	*custom_reader(void)
 {

@@ -40,7 +40,9 @@ SRCS			= main.c src/clean.c \
 					libs/utils/ft_env_utils2.c libs/utils/ft_env_utils3.c\
 					src/builtin/buitlin.c src/builtin/cd.c src/builtin/echo.c \
 					src/builtin/env.c src/builtin/export.c src/builtin/pwd.c\
-					src/builtin/history.c src/builtin/unset.c src/exec/exec.c\
+					src/builtin/history.c src/builtin/unset.c \
+					src/exec/exec.c src/exec/exec_utils.c src/exec/exec_simple.c src/exec/exec_pipe.c \
+					src/exec/exec_free.c \
 					libs/gnl/get_next_line.c \
 
 # Dossier pour les objets

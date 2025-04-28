@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 00:00:00 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/27 00:00:00 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:01:42 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static void	handle_sigint_heredoc(int sig)
 {
 	(void)sig;
 	g_return_code = 130;
-	g_heredoc_interrupted = 1;
 	write(1, "\n", 1);
 	close(STDIN_FILENO);
 }
@@ -54,7 +53,6 @@ void	setup_signals_interactive(void)
 	sa_int.sa_flags = 0;
 	sigemptyset(&sa_int.sa_mask);
 	sigaction(SIGINT, &sa_int, NULL);
-
 	sa_quit.sa_handler = SIG_IGN;
 	sa_quit.sa_flags = 0;
 	sigemptyset(&sa_quit.sa_mask);
@@ -70,7 +68,6 @@ void	setup_signals_heredoc(void)
 	sa_int.sa_flags = 0;
 	sigemptyset(&sa_int.sa_mask);
 	sigaction(SIGINT, &sa_int, NULL);
-
 	sa_quit.sa_handler = SIG_IGN;
 	sa_quit.sa_flags = 0;
 	sigemptyset(&sa_quit.sa_mask);
@@ -86,7 +83,6 @@ void	setup_signals_child(void)
 	sa_int.sa_flags = 0;
 	sigemptyset(&sa_int.sa_mask);
 	sigaction(SIGINT, &sa_int, NULL);
-
 	sa_quit.sa_handler = handle_sigquit_child;
 	sa_quit.sa_flags = 0;
 	sigemptyset(&sa_quit.sa_mask);
@@ -102,7 +98,6 @@ void	setup_signals_parent(void)
 	sa_int.sa_flags = 0;
 	sigemptyset(&sa_int.sa_mask);
 	sigaction(SIGINT, &sa_int, NULL);
-
 	sa_quit.sa_handler = SIG_IGN;
 	sa_quit.sa_flags = 0;
 	sigemptyset(&sa_quit.sa_mask);

@@ -6,204 +6,38 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 17:47:09 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/27 20:55:35 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/28 13:13:29 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_return_code = 0;
-int	g_heredoc_interrupted = 0;
-
-static char	**env_to_array(t_env *env)
+void	execute_piped_child(t_cmd *cmd, t_env *env, int prev_pipe, int *pipe_fd)
 {
-	t_env	*current;
-	char	*tmp;
-	char	**env_array;
-	int		i;
-	int		size;
-
-	size = 0;
-	current = env;
-	while (current)
-	{
-		if (current->equal_sign)
-			size++;
-		current = current->next;
-	}
-	env_array = malloc(sizeof(char *) * (size + 1));
-	if (!env_array)
-		return (NULL);
-	current = env;
-	i = 0;
-	while (current)
-	{
-		if (current->equal_sign)
-		{
-			tmp = ft_strjoin(current->name, "=");
-			env_array[i] = ft_strjoin(tmp, current->value);
-			free(tmp);
-			i++;
-		}
-		current = current->next;
-	}
-	env_array[i] = NULL;
-	return (env_array);
-}
-
-static void	execute_command(t_cmd *cmd, t_env *env)
-{
-	char	**env_array;
-
-	setup_signals_child();
+	handle_input_pipe(prev_pipe);
+	if (cmd->next)
+		handle_output_pipe(pipe_fd);
 	if (cmd->redir && !apply_redirections(cmd->redir))
 		exit(g_return_code);
-	env_array = env_to_array(env);
-	if (!env_array)
-		exit(1);
-	if (execve(cmd->path, cmd->args, env_array) == -1)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->args[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		exit(127);
-	}
-}
-
-static void	execute_simple_command(t_cmd *cmd, t_env **env)
-{
-	pid_t	pid;
-	int		status;
-	int		stdin_backup;
-	int		stdout_backup;
-
 	if (check_builtin(cmd))
-	{
-		stdin_backup = dup(STDIN_FILENO);
-		stdout_backup = dup(STDOUT_FILENO);
-		if (cmd->redir && !apply_redirections(cmd->redir))
-		{
-			g_return_code = 1;
-			return;
-		}
-		exec_builtin(cmd, env);
-		dup2(stdin_backup, STDIN_FILENO);
-		dup2(stdout_backup, STDOUT_FILENO);
-		close(stdin_backup);
-		close(stdout_backup);
-		return;
-	}
-	pid = fork();
-	if (pid == -1)
-	{
-		g_return_code = 1;
-		return;
-	}
-	if (pid == 0)
-	{
-		execute_command(cmd, *env);
-		exit(g_return_code);
-	}
+		exec_builtin(cmd, &env);
 	else
-	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			g_return_code = WEXITSTATUS(status);
-	}
-}
-
-static void	execute_piped_commands(t_cmd *cmd_list, t_env *env)
-{
-	pid_t	pid;
-	int		status;
-	int		pipe_fd[2];
-	int		prev_pipe;
-	t_cmd	*current;
-
-	current = cmd_list;
-	prev_pipe = -1;
-	while (current)
-	{
-		if (current->next && pipe(pipe_fd) == -1)
-			return ;
-		pid = fork();
-		if (pid == -1)
-			return ;
-		if (pid == 0)
-		{
-			if (prev_pipe != -1)
-			{
-				dup2(prev_pipe, STDIN_FILENO);
-				close(prev_pipe);
-			}
-			if (current->next)
-			{
-				close(pipe_fd[0]);
-				dup2(pipe_fd[1], STDOUT_FILENO);
-				close(pipe_fd[1]);
-			}
-			if (current->redir && !apply_redirections(current->redir))
-				exit(g_return_code);
-			if (check_builtin(current))
-				exec_builtin(current, &env);
-			else
-				execute_command(current, env);
-			close(0);
-			close(1);
-			close(2);
-			exit(0);
-			exit(g_return_code);
-		}
-		if (prev_pipe != -1)
-			close(prev_pipe);
-		if (current->next)
-		{
-			close(pipe_fd[1]);
-			prev_pipe = pipe_fd[0];
-		}
-		else
-			prev_pipe = -1;
-		current = current->next;
-	}
-	current = cmd_list;
-	while (current)
-	{
-		waitpid(-1, &status, 0);
-		if (WIFEXITED(status))
-			g_return_code = WEXITSTATUS(status);
-		current = current->next;
-	}
+		execute_command(cmd, env);
+	free_child(cmd, env);
+	exit(0);
 }
 
 void	exec(t_cmd *cmd, t_env **env)
 {
-	pid_t	pid;
-	int		status;
-
 	if (!cmd)
-		return;
+		return ;
 	if (!cmd->path && cmd->redir)
 	{
-		setup_signals_parent();
-		pid = fork();
-		if (pid == 0)
-		{
-			setup_signals_child();
-			if (!apply_redirections(cmd->redir))
-				exit(g_return_code);
-			exit(0);
-		}
-		else
-		{
-			waitpid(pid, &status, 0);
-			setup_signals_interactive();
-			if (WIFEXITED(status))
-				g_return_code = WEXITSTATUS(status);
-			return;
-		}
+		handle_redir_only(cmd);
+		return ;
 	}
 	if (!cmd->path)
-		return;
+		return ;
 	setup_signals_parent();
 	if (!cmd->next)
 		execute_simple_command(cmd, env);
