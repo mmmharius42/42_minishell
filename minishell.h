@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/28 19:04:49 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/28 19:10:48 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,15 +122,15 @@ void	expand_all(t_token *tokens, t_env *env);
 void	clean_heredoc(t_token *tokens, t_env *env);
 void	get_temp_heredoc_file(char *dest);
 void	handle_heredoc_child(const char *filename, const char *delimiter,
-							t_env *env, t_token *tokens);
+			t_env *env, t_token *tokens);
 int		handle_heredoc_parent(pid_t pid);
 int		process_heredoc_token(t_token *token, t_token *next, t_env *env,
-							t_token *tokens);
+			t_token *tokens);
 
 /** Parsing */
 t_cmd	*parse_tokens(t_token *tokens);
 int		process_token_to_cmd(t_token *token, t_cmd **current_cmd,
-		t_cmd **cmd_list);
+			t_cmd **cmd_list);
 int		is_redirection(int type);
 void	add_token_to_cmd(t_token *token, t_cmd *cmd);
 int		parse_error(char *message);
@@ -168,11 +168,10 @@ void	exec_builtin(t_cmd *cmd, t_env **env);
 void	ft_pwd(void);
 
 //  unset.c
-void    ft_unset(t_cmd *cmd, t_env **env);
+void	ft_unset(t_cmd *cmd, t_env **env);
 
 // exit.c
 void	ft_exit(t_cmd *cmd, t_env **env);
-
 
 // cd.c
 void	ft_cd(t_cmd *cmd, t_env **env);
@@ -221,7 +220,8 @@ void	wait_for_child(pid_t pid);
 void	handle_redir_only(t_cmd *cmd);
 void	handle_input_pipe(int prev_pipe);
 void	handle_output_pipe(int *pipe_fd);
-void	execute_piped_child(t_cmd *cmd, t_env *env, int prev_pipe, int *pipe_fd);
+void	execute_piped_child(t_cmd *cmd, t_env *env, int prev_pipe,
+			int *pipe_fd);
 void	update_pipe_status(int *prev_pipe, int *pipe_fd, t_cmd *current);
 void	wait_for_all_children(t_cmd *cmd_list);
 char	**env_to_array(t_env *env);
