@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:23:01 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/28 12:45:19 by mpapin           ###   ########.fr       */
+/*   Updated: 2025/04/28 17:12:15 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ static void	process_input(char *input, t_env **env)
 		return ;
 	tokens = tokenize(input, *env);
 	cmd = parse(tokens, env);
+	free_tokens(tokens);
 	if (cmd)
 		exec(cmd, env);
-	clean_shell(input, tokens, cmd);
+	clean_shell(input, NULL, cmd);
 }
 
 int	main(int argc, char **argv, char **envp)
