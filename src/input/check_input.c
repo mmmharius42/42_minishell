@@ -6,11 +6,27 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:35:33 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/24 23:54:23 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/28 18:52:27 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	check_double_and(char *input)
+{
+	int	i;
+
+	i = -1;
+	while (input[++i])
+	{
+		if (input[i] == '&' && input[i + 1] == '&')
+		{
+			printf("minishell: syntax error near unexpected token `&&'\n");
+			return (0);
+		}
+	}
+	return (1);
+}
 
 static int	check_quote(char *input)
 {
@@ -37,6 +53,8 @@ static int	check_quote(char *input)
 int	check_input(char *input)
 {
 	if (!check_quote(input))
+		return (0);
+	if (!check_double_and(input))
 		return (0);
 	return (1);
 }
