@@ -33,7 +33,7 @@ SRCS			= main.c src/clean.c \
 					src/expand/variable_expand.c src/expand/variable_expand_utils.c \
 					src/expand/tilde_expand.c \
 					src/expand/exit_code_expand.c src/signals/signals.c \
-					src/parsing/parse_args.c src/parsing/parse_free.c \
+					src/parsing/parse_args.c src/parsing/parse_free.c src/parsing/parse_redir_utils.c \
 					src/parsing/parse_path.c src/parsing/parse_redir.c \
 					src/parsing/parse.c src/parsing/parse_utils.c \
 					libs/utils/ft_is_path.c libs/utils/ft_env_utils.c \

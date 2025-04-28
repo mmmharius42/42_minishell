@@ -17,6 +17,8 @@ static char	*get_input(void)
 	char	*input;
 
 	input = custom_reader();
+	if (input && *input)
+		add_history(input);
 	return (input);
 }
 
@@ -45,7 +47,7 @@ int	main(int argc, char **argv, char **envp)
 	env = NULL;
 	env_init(&env, envp);
 	exit_status = 0;
-	//load_history();
+	load_history();
 	setup_signals_interactive();
 	while (!exit_status)
 	{
@@ -53,7 +55,10 @@ int	main(int argc, char **argv, char **envp)
 		if (!input)
 			break ;
 		if (*input)
+		{
+			save_history(input);
 			process_input(input, &env);
+		}
 		else
 			free(input);
 	}

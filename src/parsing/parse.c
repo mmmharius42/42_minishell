@@ -12,6 +12,21 @@
 
 #include "minishell.h"
 
+static int	handle_token(t_token **cur_token, t_cmd **cur_cmd, t_cmd **list)
+{
+	if (is_redirection((*cur_token)->type))
+	{
+		if (!process_redirection(*cur_token, cur_cmd))
+			return (0);
+		if ((*cur_token)->next)
+			*cur_token = (*cur_token)->next;
+	}
+	else if (!process_token_to_cmd(*cur_token, cur_cmd, list))
+		return (0);
+	*cur_token = (*cur_token)->next;
+	return (1);
+}
+
 t_cmd	*parse_tokens(t_token *tokens)
 {
 	t_cmd	*cmd_list;
@@ -25,24 +40,12 @@ t_cmd	*parse_tokens(t_token *tokens)
 	current_token = tokens;
 	while (current_token)
 	{
-		if (is_redirection(current_token->type))
-		{
-			if (!process_redirection(current_token, &current_cmd))
-			{
-				free_commands(cmd_list);
-				free_command(current_cmd);
-				return (NULL);
-			}
-			if (current_token->next)
-				current_token = current_token->next;
-		}
-		else if (!process_token_to_cmd(current_token, &current_cmd, &cmd_list))
+		if (!handle_token(&current_token, &current_cmd, &cmd_list))
 		{
 			free_commands(cmd_list);
 			free_command(current_cmd);
 			return (NULL);
 		}
-		current_token = current_token->next;
 	}
 	if (current_cmd && (current_cmd->tokens || current_cmd->redir))
 		add_command(&cmd_list, current_cmd);

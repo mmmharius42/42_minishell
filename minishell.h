@@ -124,8 +124,9 @@ t_cmd	*create_command(void);
 void	add_command(t_cmd **cmd_list, t_cmd *cmd);
 int		process_redirection(t_token *token, t_cmd **cmd);
 t_redir	*create_redirection(int type, char *file);
-void	add_redirection(t_redir **redir_list, t_redir *redir);
 int		apply_redirections(t_redir *redir);
+
+void	add_redirection(t_redir **redir_list, t_redir *redir);
 int		redirect_error(char *file);
 
 int		count_args(t_token *tokens);

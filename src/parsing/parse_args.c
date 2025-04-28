@@ -36,6 +36,19 @@ int	count_args(t_token *tokens)
 ** Remplit le tableau d'arguments à partir des tokens de type WORD.
 ** Retourne le tableau d'arguments.
 */
+static int	allocate_arg(char **args, int i, char *value)
+{
+	args[i] = ft_strdup(value);
+	if (!args[i])
+	{
+		while (--i >= 0)
+			free(args[i]);
+		free(args);
+		return (0);
+	}
+	return (1);
+}
+
 char	**fill_args(t_token *tokens, int count)
 {
 	char	**args;
@@ -51,14 +64,8 @@ char	**fill_args(t_token *tokens, int count)
 	{
 		if (current->type == WORD)
 		{
-			args[i] = ft_strdup(current->value);
-			if (!args[i])
-			{
-				while (--i >= 0)
-					free(args[i]);
-				free(args);
+			if (!allocate_arg(args, i, current->value))
 				return (NULL);
-			}
 			i++;
 		}
 		current = current->next;
@@ -126,11 +133,25 @@ int	prepare_all_args(t_cmd *cmd_list)
 ** Retourne 1 en cas de succès, 0 en cas d'erreur.
 ** Prend en compte les commandes qui n'ont que des redirections.
 */
+static void	update_path(t_cmd *cmd, char *path_env)
+{
+	char	*exec_path;
+
+	if (cmd->path && cmd->path[0] != '/' && ft_strncmp(cmd->path, "./", 2) != 0)
+	{
+		exec_path = find_executable(cmd->path, path_env);
+		if (exec_path)
+		{
+			free(cmd->path);
+			cmd->path = exec_path;
+		}
+	}
+}
+
 int	resolve_paths(t_cmd *cmd_list, t_env *env)
 {
 	t_cmd	*current;
 	char	*path_env;
-	char	*exec_path;
 
 	current = cmd_list;
 	path_env = get_env_value(env, "PATH");
@@ -141,16 +162,7 @@ int	resolve_paths(t_cmd *cmd_list, t_env *env)
 			current = current->next;
 			continue ;
 		}
-		if (current->path && current->path[0] != '/'
-			&& ft_strncmp(current->path, "./", 2) != 0)
-		{
-			exec_path = find_executable(current->path, path_env);
-			if (exec_path)
-			{
-				free(current->path);
-				current->path = exec_path;
-			}
-		}
+		update_path(current, path_env);
 		current = current->next;
 	}
 	return (1);
