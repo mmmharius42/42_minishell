@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 17:47:09 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/27 21:16:42 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/28 13:05:06 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ void	execute_piped_child(t_cmd *cmd, t_env *env, int prev_pipe, int *pipe_fd)
 		exec_builtin(cmd, &env);
 	else
 		execute_command(cmd, env);
-	close(0);
-	close(1);
-	close(2);
+	free_child(cmd, env);
 	exit(0);
 }
 

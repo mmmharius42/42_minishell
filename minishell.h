@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/27 21:16:27 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/28 13:04:27 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,7 @@ void	update_pipe_status(int *prev_pipe, int *pipe_fd, t_cmd *current);
 void	wait_for_all_children(t_cmd *cmd_list);
 char	**env_to_array(t_env *env);
 char	**fill_env_array(t_env *env, char **env_array);
+void	free_child(t_cmd *cmd, t_env *env);
 
 // Signals
 void	setup_signals_interactive(void);
