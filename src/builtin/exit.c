@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:47:20 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/28 13:47:20 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:51:57 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,27 @@ static int	is_numeric(char *str)
 	return (1);
 }
 
+static int	check_args(int arg_count, t_cmd *cmd, long *status)
+{
+	if (!is_numeric(cmd->args[1]))
+	{
+		ft_putendl_fd("minishell: exit: numeric argument required", 2);
+		*status = 255;
+		return (1);
+	}
+	else if (arg_count > 2)
+	{
+		ft_putendl_fd("minishell: exit: too many arguments", 2);
+		g_return_code = 1;
+		return (0);
+	}
+	else
+	{
+		*status = ft_atoi(cmd->args[1]);
+		return (1);
+	}
+}
+
 void	ft_exit(t_cmd *cmd, t_env **env)
 {
 	long	status;
@@ -40,21 +61,11 @@ void	ft_exit(t_cmd *cmd, t_env **env)
 		arg_count++;
 	if (arg_count > 1)
 	{
-		if (!is_numeric(cmd->args[1]))
-		{
-			ft_putendl_fd("minishell: exit: numeric argument required", 2);
-			status = 255;
-		}
-		else if (arg_count > 2)
-		{
-			ft_putendl_fd("minishell: exit: too many arguments", 2);
-			g_return_code = 1;
+		if (!check_args(arg_count, cmd, &status))
 			return ;
-		}
-		else
-			status = ft_atoi(cmd->args[1]);
 	}
 	free_env(*env);
+	free_commands(cmd);
 	rl_clear_history();
 	exit((unsigned char)status);
 }

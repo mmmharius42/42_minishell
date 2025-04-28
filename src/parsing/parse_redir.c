@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 01:30:51 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/27 21:01:03 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:52:59 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,69 +57,6 @@ t_redir	*create_redirection(int type, char *file)
 	return (redir);
 }
 
-/*
-** Lit et stocke l'entrée du heredoc jusqu'à ce que
-** le délimiteur soit trouvé.
-** Retourne un descripteur de fichier pour lire le contenu,
-** ou -1 en cas d'erreur.
-*/
-static void	handle_heredoc_child(int *pipe_fd, char *delimiter)
-{
-	char	*line;
-
-	setup_signals_heredoc();
-	close(pipe_fd[0]);
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, delimiter) == 0)
-		{
-			if (line)
-				free(line);
-			break ;
-		}
-		ft_putstr_fd(line, pipe_fd[1]);
-		ft_putstr_fd("\n", pipe_fd[1]);
-		free(line);
-	}
-	close(pipe_fd[1]);
-	exit(0);
-}
-
-static int	handle_heredoc_parent(int *pipe_fd, pid_t pid)
-{
-	int	status;
-
-	close(pipe_fd[1]);
-	waitpid(pid, &status, 0);
-	setup_signals_interactive();
-	if (WIFSIGNALED(status) || (WIFEXITED(status) && WEXITSTATUS(status) == 130))
-	{
-		g_return_code = 130;
-		close(pipe_fd[0]);
-		return (-130);
-	}
-	return (pipe_fd[0]);
-}
-
-static int	handle_heredoc(char *delimiter)
-{
-	int		pipe_fd[2];
-	pid_t	pid;
-
-	if (pipe(pipe_fd) == -1)
-		return (-1);
-	pid = fork();
-	if (pid == -1)
-	{
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-		return (-1);
-	}
-	if (pid == 0)
-		handle_heredoc_child(pipe_fd, delimiter);
-	return (handle_heredoc_parent(pipe_fd, pid));
-}
 
 /*
 ** Applique les redirections pour une commande.
@@ -133,15 +70,6 @@ static int	open_redir_file(t_redir *redir, int *fd)
 		*fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (redir->type == APPEND)
 		*fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else if (redir->type == HEREDOC)
-	{
-		*fd = handle_heredoc(redir->file);
-		if (*fd == -130)
-		{
-			ft_putstr_fd("minishell: heredoc interrompu\n", 2);
-			return (0);
-		}
-	}
 	return (1);
 }
 

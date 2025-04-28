@@ -24,10 +24,14 @@
 # include <sys/wait.h>
 # include <signal.h>
 # include <sys/stat.h>
+# include <limits.h>
 # include "libft.h"
 # include "get_next_line.h"
 
 # define MAX_LINE 1024
+# ifndef PATH_MAX
+#  define PATH_MAX 4096
+# endif
 
 # define RED "\033[0;31m"
 # define RESET "\033[0m"
@@ -110,6 +114,7 @@ char	*add_char_to_str(char *str, char c);
 void	expand_variable(t_token *tokens, t_env *env);
 void	expand_tilde(t_token *tokens, t_env *env);
 void	expand_exit_code(t_token *tokens);
+void	expand_heredocs(t_token *tokens);
 void	expand_all(t_token *tokens, t_env *env);
 
 /** Parsing */

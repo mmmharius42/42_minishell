@@ -12,10 +12,28 @@
 
 #include "minishell.h"
 
+/*
+** Nettoie le fichier heredoc
+*/
+static void	clean_heredoc_file(void)
+{
+	char	filename[PATH_MAX];
+	char	*home;
+
+	home = getenv("HOME");
+	if (!home)
+		home = "/tmp";
+	ft_strcpy(filename, home);
+	ft_strcat(filename, "/.minishell_heredoc");
+	unlink(filename);
+}
+
 void	free_child(t_cmd *cmd, t_env *env)
 {
 	free_commands(cmd);
 	free_env(env);
+	rl_clear_history();
+	clean_heredoc_file();
 	close(0);
 	close(1);
 	close(2);

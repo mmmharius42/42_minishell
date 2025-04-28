@@ -30,11 +30,30 @@ static void	process_input(char *input, t_env **env)
 	if (!check_input(input) || !(*input))
 		return ;
 	tokens = tokenize(input, *env);
-	cmd = parse(tokens, env);
-	free_tokens(tokens);
-	if (cmd)
-		exec(cmd, env);
-	clean_shell(input, NULL, cmd);
+	if (tokens)
+	{
+		expand_all(tokens, *env);
+		cmd = parse(tokens, env);
+		free_tokens(tokens);
+		if (cmd)
+			exec(cmd, env);
+		clean_shell(input, NULL, cmd);
+	}
+	else
+		free(input);
+}
+
+static void	cleanup_heredoc(void)
+{
+	char	filename[PATH_MAX];
+	char	*home;
+
+	home = getenv("HOME");
+	if (!home)
+		home = "/tmp";
+	ft_strcpy(filename, home);
+	ft_strcat(filename, "/.minishell_heredoc");
+	unlink(filename);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -64,6 +83,7 @@ int	main(int argc, char **argv, char **envp)
 			free(input);
 	}
 	free_env(env);
+	cleanup_heredoc();
 	printf("exit\n");
 	return (g_return_code);
 }
