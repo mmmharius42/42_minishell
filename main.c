@@ -49,7 +49,7 @@ int	main(int argc, char **argv, char **envp)
 	exit_status = 0;
 	load_history();
 	setup_signals_interactive();
-	while (!exit_status)
+	while (1)
 	{
 		input = get_input();
 		if (!input)

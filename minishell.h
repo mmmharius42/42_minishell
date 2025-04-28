@@ -154,6 +154,9 @@ void	ft_pwd(void);
 //  unset.c
 void    ft_unset(t_cmd *cmd, t_env **env);
 
+// exit.c
+void	ft_exit(t_cmd *cmd, t_env **env);
+
 
 // cd.c
 void	ft_cd(t_cmd *cmd, t_env **env);

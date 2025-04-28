@@ -76,6 +76,8 @@ void	wait_for_all_children(t_cmd *cmd_list)
 		waitpid(-1, &status, 0);
 		if (WIFEXITED(status))
 			g_return_code = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_return_code = 128 + WTERMSIG(status);
 		current = current->next;
 	}
 }

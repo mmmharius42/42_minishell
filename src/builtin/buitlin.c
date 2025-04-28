@@ -53,6 +53,6 @@ void	exec_builtin(t_cmd *cmd, t_env **env)
 		ft_unset(cmd, env);
 	else if (ft_strncmp(cmd->args[0], "cd", 3) == 0)
 		ft_cd(cmd, env);
-	else if (ft_strncmp(cmd->args[0], "exit", 3) == 0)
-		return ;
+	else if (ft_strncmp(cmd->args[0], "exit", 5) == 0)
+		ft_exit(cmd, env);
 }
