@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:54:39 by mpapin            #+#    #+#             */
-/*   Updated: 2025/04/28 12:56:40 by mpapin           ###   ########.fr       */
+/*   Updated: 2025/04/28 19:05:14 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,11 +107,10 @@ void	ft_cd(t_cmd *cmd, t_env **env)
 	if (chdir(target_path) == -1)
 	{
 		printf("cd: %s: %s\n", target_path, strerror(errno));
-		free(current_pwd);
-		free(target_path);
+		g_return_code = 1;
+		free_cd(current_pwd, target_path);
 		return ;
 	}
 	update_pwd_env(env, current_pwd);
-	free(current_pwd);
-	free(target_path);
+	free_cd(current_pwd, target_path);
 }

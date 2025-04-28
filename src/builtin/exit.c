@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:47:20 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/28 17:51:57 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/28 19:07:56 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	check_args(int arg_count, t_cmd *cmd, long *status)
 	if (!is_numeric(cmd->args[1]))
 	{
 		ft_putendl_fd("minishell: exit: numeric argument required", 2);
-		*status = 255;
+		*status = 2;
 		return (1);
 	}
 	else if (arg_count > 2)

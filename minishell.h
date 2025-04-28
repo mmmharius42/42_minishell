@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/28 18:42:30 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/28 19:04:49 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,7 @@ char	*get_pwd_value(void);
 void	export_variable(const char *name, const char *value, t_env **env);
 char	*get_target_path(t_cmd *cmd, t_env *env);
 void	update_pwd_env(t_env **env, char *old_pwd);
+void	free_cd(char *cur, char *tar);
 
 // echo.c
 void	ft_echo(char **args);
