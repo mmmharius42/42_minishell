@@ -6,7 +6,7 @@
 /*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:54:39 by mpapin            #+#    #+#             */
-/*   Updated: 2025/04/26 15:42:24 by mpapin           ###   ########.fr       */
+/*   Updated: 2025/04/28 12:56:40 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ char	*get_pwd_value(void)
 
 void	export_variable(const char *name, const char *value, t_env **env)
 {
-	t_env *tmp = *env;
+	t_env	*tmp;
+	t_env	*new;
+
+	tmp = *env;
 	while (tmp)
 	{
 		if (ft_strcmp(tmp->name, name) == 0)
@@ -43,16 +46,13 @@ void	export_variable(const char *name, const char *value, t_env **env)
 			free(tmp->value);
 			tmp->value = ft_strdup(value);
 			tmp->equal_sign = 1;
-			return;
+			return ;
 		}
 		tmp = tmp->next;
 	}
-	t_env *new = malloc(sizeof(t_env));
+	new = create_env_node(name, value);
 	if (!new)
-		return;
-	new->name = ft_strdup(name);
-	new->value = ft_strdup(value);
-	new->equal_sign = 1;
+		return ;
 	new->next = *env;
 	*env = new;
 }
@@ -61,8 +61,8 @@ char	*get_target_path(t_cmd *cmd, t_env *env)
 {
 	char	*home;
 
-	if (!cmd->args[1] || ft_strcmp(cmd->args[1], "~") == 0 ||
-		ft_strcmp(cmd->args[1], "~/") == 0)
+	if (!cmd->args[1] || ft_strcmp(cmd->args[1], "~") == 0
+		|| ft_strcmp(cmd->args[1], "~/") == 0)
 	{
 		home = get_env_value(env, "HOME");
 		if (!home)

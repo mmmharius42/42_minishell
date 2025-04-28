@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:23:01 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/27 19:51:33 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:45:19 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ static char	*get_input(void)
 	return (input);
 }
 
-static void process_input(char *input, t_env **env)
+static void	process_input(char *input, t_env **env)
 {
-	t_token *tokens;
-	t_cmd *cmd;
+	t_token	*tokens;
+	t_cmd	*cmd;
 
 	if (!check_input(input) || !(*input))
-		return;
+		return ;
 	tokens = tokenize(input, *env);
 	cmd = parse(tokens, env);
 	if (cmd)

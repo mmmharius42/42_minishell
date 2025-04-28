@@ -6,22 +6,22 @@
 /*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 14:23:17 by mpapin            #+#    #+#             */
-/*   Updated: 2025/04/27 14:43:27 by mpapin           ###   ########.fr       */
+/*   Updated: 2025/04/28 12:57:12 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_unset(t_cmd *cmd, t_env **env)
+void	ft_unset(t_cmd *cmd, t_env **env)
 {
-    int i = 1;
+	int	i;
 
-    if (!cmd->args[i])
-        return ;
-
-    while (cmd->args[i])
-    {
-        unset_env_var(env, cmd->args[i]);
-        i++;
-    }
+	i = 1;
+	if (!cmd->args[i])
+		return ;
+	while (cmd->args[i])
+	{
+		unset_env_var(env, cmd->args[i]);
+		i++;
+	}
 }
