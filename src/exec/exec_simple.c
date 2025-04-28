@@ -19,6 +19,8 @@ void	wait_for_child(pid_t pid)
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		g_return_code = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		g_return_code = 128 + WTERMSIG(status);
 }
 
 void	execute_simple_command(t_cmd *cmd, t_env **env)
@@ -65,5 +67,7 @@ void	handle_redir_only(t_cmd *cmd)
 		setup_signals_interactive();
 		if (WIFEXITED(status))
 			g_return_code = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_return_code = 128 + WTERMSIG(status);
 	}
 }

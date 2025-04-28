@@ -58,68 +58,38 @@ t_redir	*create_redirection(int type, char *file)
 }
 
 /*
-** Ajoute une redirection à la fin de la liste de redirections.
-** Si la liste est vide, initialise la liste avec la redirection.
-*/
-void	add_redirection(t_redir **redir_list, t_redir *redir)
-{
-	t_redir	*current;
-
-	if (!redir_list || !redir)
-		return ;
-	if (*redir_list == NULL)
-	{
-		*redir_list = redir;
-		return ;
-	}
-	current = *redir_list;
-	while (current->next)
-		current = current->next;
-	current->next = redir;
-}
-
-/*
 ** Lit et stocke l'entrée du heredoc jusqu'à ce que
 ** le délimiteur soit trouvé.
 ** Retourne un descripteur de fichier pour lire le contenu,
 ** ou -1 en cas d'erreur.
 */
-static int	handle_heredoc(char *delimiter)
+static void	handle_heredoc_child(int *pipe_fd, char *delimiter)
 {
 	char	*line;
-	int		pipe_fd[2];
-	pid_t	pid;
-	int		status;
 
-	if (pipe(pipe_fd) == -1)
-		return (-1);
-	pid = fork();
-	if (pid == -1)
+	setup_signals_heredoc();
+	close(pipe_fd[0]);
+	while (1)
 	{
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-		return (-1);
-	}
-	if (pid == 0)
-	{
-		setup_signals_heredoc();
-		close(pipe_fd[0]);
-		while (1)
+		line = readline("> ");
+		if (!line || ft_strcmp(line, delimiter) == 0)
 		{
-			line = readline("> ");
-			if (!line || ft_strcmp(line, delimiter) == 0)
-			{
-				if (line)
-					free(line);
-				break ;
-			}
-			ft_putstr_fd(line, pipe_fd[1]);
-			ft_putstr_fd("\n", pipe_fd[1]);
-			free(line);
+			if (line)
+				free(line);
+			break ;
 		}
-		close(pipe_fd[1]);
-		exit(0);
+		ft_putstr_fd(line, pipe_fd[1]);
+		ft_putstr_fd("\n", pipe_fd[1]);
+		free(line);
 	}
+	close(pipe_fd[1]);
+	exit(0);
+}
+
+static int	handle_heredoc_parent(int *pipe_fd, pid_t pid)
+{
+	int	status;
+
 	close(pipe_fd[1]);
 	waitpid(pid, &status, 0);
 	setup_signals_interactive();
@@ -132,10 +102,64 @@ static int	handle_heredoc(char *delimiter)
 	return (pipe_fd[0]);
 }
 
+static int	handle_heredoc(char *delimiter)
+{
+	int		pipe_fd[2];
+	pid_t	pid;
+
+	if (pipe(pipe_fd) == -1)
+		return (-1);
+	pid = fork();
+	if (pid == -1)
+	{
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+		return (-1);
+	}
+	if (pid == 0)
+		handle_heredoc_child(pipe_fd, delimiter);
+	return (handle_heredoc_parent(pipe_fd, pid));
+}
+
 /*
 ** Applique les redirections pour une commande.
 ** Retourne 1 en cas de succès, 0 en cas d'erreur.
 */
+static int	open_redir_file(t_redir *redir, int *fd)
+{
+	if (redir->type == REDIR_IN)
+		*fd = open(redir->file, O_RDONLY);
+	else if (redir->type == REDIR_OUT)
+		*fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (redir->type == APPEND)
+		*fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else if (redir->type == HEREDOC)
+	{
+		*fd = handle_heredoc(redir->file);
+		if (*fd == -130)
+		{
+			ft_putstr_fd("minishell: heredoc interrompu\n", 2);
+			return (0);
+		}
+	}
+	return (1);
+}
+
+static int	apply_redir_fd(t_redir *redir, int fd)
+{
+	if (fd == -1)
+	{
+		g_return_code = 1;
+		return (redirect_error(redir->file));
+	}
+	if (redir->type == REDIR_IN || redir->type == HEREDOC)
+		dup2(fd, STDIN_FILENO);
+	else
+		dup2(fd, STDOUT_FILENO);
+	close(fd);
+	return (1);
+}
+
 int	apply_redirections(t_redir *redir)
 {
 	t_redir	*current;
@@ -144,54 +168,16 @@ int	apply_redirections(t_redir *redir)
 	current = redir;
 	while (current)
 	{
-		if (current->type == REDIR_IN)
-			fd = open(current->file, O_RDONLY);
-		else if (current->type == REDIR_OUT)
-			fd = open(current->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		else if (current->type == APPEND)
-			fd = open(current->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else if (current->type == HEREDOC)
+		if (!open_redir_file(current, &fd))
+			return (0);
+		if (current->type == REDIR_IN || current->type == REDIR_OUT
+			|| current->type == APPEND || current->type == HEREDOC)
 		{
-			fd = handle_heredoc(current->file);
-			if (fd == -130)
-			{
-				ft_putstr_fd("minishell: heredoc interrompu\n", 2);
+			if (!apply_redir_fd(current, fd))
 				return (0);
-			}
 		}
-		else
-			continue ;
-		if (fd == -1)
-		{
-			g_return_code = 1;
-			return (redirect_error(current->file));
-		}
-		if (current->type == REDIR_IN || current->type == HEREDOC)
-			dup2(fd, STDIN_FILENO);
-		else
-			dup2(fd, STDOUT_FILENO);
-		close(fd);
 		current = current->next;
 	}
 	return (1);
 }
 
-/*
-** Affiche une erreur de redirection.
-** Retourne toujours 0 pour indiquer une erreur.
-*/
-int	redirect_error(char *file)
-{
-	if (!file)
-	{
-		ft_putstr_fd("minishell: heredoc interrompu\n", 2);
-		return (0);
-	}
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(file, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(strerror(errno), 2);
-	ft_putstr_fd("\n", 2);
-	g_return_code = 1;
-	return (0);
-}
