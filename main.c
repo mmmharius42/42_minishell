@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:23:01 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/28 17:12:15 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/28 18:42:13 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static void	process_input(char *input, t_env **env)
 
 	if (!check_input(input) || !(*input))
 		return ;
+	save_history(input);
 	tokens = tokenize(input, *env);
 	if (tokens)
 	{
@@ -43,45 +44,40 @@ static void	process_input(char *input, t_env **env)
 		free(input);
 }
 
-static void	cleanup_heredoc(void)
+static void	initialize_shell(t_env **ptr_env, char **envp)
 {
-	char	filename[PATH_MAX];
-	char	*home;
-
-	home = getenv("HOME");
-	if (!home)
-		home = "/tmp";
-	ft_strcpy(filename, home);
-	ft_strcat(filename, "/.minishell_heredoc");
-	unlink(filename);
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	t_env	*env;
-	char	*input;
-	int		exit_status;
-
-	(void) argc;
-	(void) argv;
-	env = NULL;
-	env_init(&env, envp);
-	exit_status = 0;
+	env_init(ptr_env, envp);
 	load_history();
 	setup_signals_interactive();
+}
+
+static void	run_shell_loop(t_env **ptr_env)
+{
+	char	*input;
+
 	while (1)
 	{
 		input = get_input();
 		if (!input)
 			break ;
 		if (*input)
-		{
-			save_history(input);
-			process_input(input, &env);
-		}
+			process_input(input, ptr_env);
 		else
 			free(input);
 	}
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_env			*env;
+	static t_env	**ptr_env;
+
+	(void) argc;
+	(void) argv;
+	env = NULL;
+	ptr_env = &env;
+	initialize_shell(ptr_env, envp);
+	run_shell_loop(ptr_env);
 	free_env(env);
 	cleanup_heredoc();
 	printf("exit\n");

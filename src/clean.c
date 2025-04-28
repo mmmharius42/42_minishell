@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 19:49:04 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/28 17:39:10 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/28 18:42:20 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,17 @@ void	clean_shell(char *input, t_token *tokens, t_cmd *cmd)
 		free(input);
 	if (cmd)
 		free_commands(cmd);
+}
+
+void	cleanup_heredoc(void)
+{
+	char	filename[PATH_MAX];
+	char	*home;
+
+	home = getenv("HOME");
+	if (!home)
+		home = "/tmp";
+	ft_strcpy(filename, home);
+	ft_strcat(filename, "/.minishell_heredoc");
+	unlink(filename);
 }

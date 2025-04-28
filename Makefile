@@ -32,7 +32,8 @@ SRCS			= main.c src/clean.c \
 					src/expand/expand.c \
 					src/expand/variable_expand.c src/expand/variable_expand_utils.c \
 					src/expand/tilde_expand.c \
-					src/expand/exit_code_expand.c src/expand/heredoc_expand.c src/signals/signals.c \
+					src/expand/exit_code_expand.c src/expand/heredoc_expand.c \
+					src/expand/heredoc_process.c src/signals/signals.c \
 					src/parsing/parse_args.c src/parsing/parse_free.c src/parsing/parse_redir_utils.c \
 					src/parsing/parse_path.c src/parsing/parse_redir.c \
 					src/parsing/parse.c src/parsing/parse_utils.c \
@@ -43,6 +44,7 @@ SRCS			= main.c src/clean.c \
 					src/builtin/history.c src/builtin/unset.c src/builtin/exit.c \
 					src/exec/exec.c src/exec/exec_utils.c src/exec/exec_simple.c src/exec/exec_pipe.c \
 					src/exec/exec_free.c \
+					src/signals/signals_child.c src/parsing/parse_args_norm.c \
 					libs/gnl/get_next_line.c \
 
 # Dossier pour les objets

@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:18:27 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/28 13:04:27 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/28 18:42:30 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void	clean_shell(char *input, t_token *tokens, t_cmd *cmd);
 void	*free_commands(t_cmd *cmd_list);
 void	free_command(t_cmd *cmd);
 void	free_redirections(t_redir *redir);
+void	cleanup_heredoc(void);
 
 /** Input */
 char	*custom_reader(void);
@@ -114,8 +115,17 @@ char	*add_char_to_str(char *str, char c);
 void	expand_variable(t_token *tokens, t_env *env);
 void	expand_tilde(t_token *tokens, t_env *env);
 void	expand_exit_code(t_token *tokens);
-void	expand_heredocs(t_token *tokens);
+void	expand_heredocs(t_token *tokens, t_env *env);
 void	expand_all(t_token *tokens, t_env *env);
+
+/** Heredoc */
+void	clean_heredoc(t_token *tokens, t_env *env);
+void	get_temp_heredoc_file(char *dest);
+void	handle_heredoc_child(const char *filename, const char *delimiter,
+							t_env *env, t_token *tokens);
+int		handle_heredoc_parent(pid_t pid);
+int		process_heredoc_token(t_token *token, t_token *next, t_env *env,
+							t_token *tokens);
 
 /** Parsing */
 t_cmd	*parse_tokens(t_token *tokens);
@@ -134,12 +144,13 @@ int		apply_redirections(t_redir *redir);
 void	add_redirection(t_redir **redir_list, t_redir *redir);
 int		redirect_error(char *file);
 
-int		count_args(t_token *tokens);
 char	**fill_args(t_token *tokens, int count);
 int		prepare_args(t_cmd *cmd);
 int		prepare_all_args(t_cmd *cmd_list);
 int		resolve_paths(t_cmd *cmd_list, t_env *env);
 
+int		count_args(t_token *tokens);
+int		allocate_arg(char **args, int i, char *value);
 int		is_executable(char *path);
 char	*create_path(char *dir, char *file);
 char	*find_executable(char *cmd, char *path_env);
@@ -217,6 +228,8 @@ char	**fill_env_array(t_env *env, char **env_array);
 void	free_child(t_cmd *cmd, t_env *env);
 
 // Signals
+void	handle_sigint_child(int sig);
+void	handle_sigquit_child(int sig);
 void	setup_signals_interactive(void);
 void	setup_signals_heredoc(void);
 void	setup_signals_child(void);

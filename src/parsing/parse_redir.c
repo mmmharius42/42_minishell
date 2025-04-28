@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 01:30:51 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/28 17:52:59 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/28 18:36:35 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ t_redir	*create_redirection(int type, char *file)
 	redir->next = NULL;
 	return (redir);
 }
-
 
 /*
 ** Applique les redirections pour une commande.
@@ -108,4 +107,3 @@ int	apply_redirections(t_redir *redir)
 	}
 	return (1);
 }
-
