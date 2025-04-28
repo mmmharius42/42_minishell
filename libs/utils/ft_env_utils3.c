@@ -6,7 +6,7 @@
 /*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 01:36:35 by mpapin            #+#    #+#             */
-/*   Updated: 2025/04/26 16:05:00 by mpapin           ###   ########.fr       */
+/*   Updated: 2025/04/28 12:56:34 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,17 @@ char	*clean_quotes(char *value)
 	}
 	cleaned[len - 2] = '\0';
 	return (cleaned);
+}
+
+t_env	*create_env_node(const char *name, const char *value)
+{
+	t_env	*new;
+
+	new = malloc(sizeof(t_env));
+	if (!new)
+		return (NULL);
+	new->name = ft_strdup(name);
+	new->value = ft_strdup(value);
+	new->equal_sign = 1;
+	return (new);
 }

@@ -6,7 +6,7 @@
 /*   By: mpapin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 23:59:10 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/26 16:05:22 by mpapin           ###   ########.fr       */
+/*   Updated: 2025/04/28 12:49:37 by mpapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ void	env_add_back(t_env **env, t_env *new)
 
 void	env_init(t_env **env_list, char **env)
 {
-	int	i;
+	int		i;
+	int		equal;
 	char	*name;
 	char	*value;
-	int	equal;
 	t_env	*new;
 
 	i = -1;
