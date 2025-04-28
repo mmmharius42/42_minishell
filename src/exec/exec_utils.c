@@ -6,7 +6,7 @@
 /*   By: aberenge <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 21:30:00 by aberenge          #+#    #+#             */
-/*   Updated: 2025/04/27 21:30:00 by aberenge         ###   ########.fr       */
+/*   Updated: 2025/04/28 15:06:31 by aberenge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	execute_command(t_cmd *cmd, t_env *env)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd->args[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
+		free_child(cmd, env);
 		exit(127);
 	}
 }
