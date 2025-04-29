@@ -29,7 +29,7 @@ Minishell est une implémentation simplifiée d'un shell Unix similaire à bash.
 
 ### Prérequis
 
-- Compilateur GCC
+- Compilateur CC
 - Make
 - Bibliothèque Readline
 
@@ -131,5 +131,5 @@ Le projet est organisé en plusieurs modules :
 
 ## 👥 Auteurs
 
-- [@aberenge]
-- [@mpapin]
+- BERENGER Ambroise
+- PAPIN Marius
