@@ -1,4 +1,5 @@
 # Minishell
+Shell Unix simplifié avec pipes, redirections et builtins - Projet 42
 
 ![Minishell](https://img.shields.io/badge/Shell-Minishell-red)
 ![42](https://img.shields.io/badge/42-Project-brightgreen)
